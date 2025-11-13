@@ -1,0 +1,81 @@
+import App from "@/App";
+import DashboardLayout from "@/layout/Dashboardlayout";
+import Login from "@/Pages/AuthPages/Login";
+import Register from "@/Pages/AuthPages/Register";
+import Verify from "@/Pages/AuthPages/Verify";
+import AboutPage from "@/Pages/SharedPages/AboutPage";
+import ContactPage from "@/Pages/SharedPages/ContactPage";
+import FAQPage from "@/Pages/SharedPages/FAQPage";
+import FeaturesPage from "@/Pages/SharedPages/FeaturesPage";
+import HomePage from "@/Pages/SharedPages/HomePage";
+import { generateRoutes } from "@/utils/generateRoutes";
+
+import { createBrowserRouter, Navigate } from "react-router";
+import { adminSidebarItems } from "./adminSidebarItems";
+import { userSidebarItems } from "./userSidebarItems";
+import { agentSidebarItems } from "./agentSidebarItems";
+
+export const router = createBrowserRouter([
+  {
+    Component: App,
+    path: "/",
+    children: [
+      {
+        Component: HomePage,
+        index: true,
+      },
+      {
+        Component: AboutPage,
+        path: "/about",
+      },
+      {
+        Component: FeaturesPage,
+        path: "/features",
+      },
+      {
+        Component: FAQPage,
+        path: "/faq",
+      },
+      {
+        Component: ContactPage,
+        path: "/contact",
+      },
+    ],
+  },
+  {
+    Component: DashboardLayout,
+    path: "/admin",
+    children: [
+      { index: true, element: <Navigate to="/admin/balance" /> },
+      ...generateRoutes(adminSidebarItems),
+    ],
+  },
+  {
+    Component: DashboardLayout,
+    path: "/user",
+    children: [
+      { index: true, element: <Navigate to="/user/profile" /> },
+      ...generateRoutes(userSidebarItems),
+    ],
+  },
+  {
+    Component: DashboardLayout,
+    path: "/agent",
+    children: [
+      { index: true, element: <Navigate to="/agent/profile" /> },
+      ...generateRoutes(agentSidebarItems),
+    ],
+  },
+  {
+    Component: Register,
+    path: "/register",
+  },
+  {
+    Component: Login,
+    path: "/login",
+  },
+  {
+    Component: Verify,
+    path: "/verify",
+  },
+]);
