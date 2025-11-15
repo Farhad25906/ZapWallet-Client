@@ -15,6 +15,7 @@ import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
 import { agentSidebarItems } from "./agentSidebarItems";
 import ErrorPage from "@/Pages/SharedPages/ErrorPage";
+import { withAuth } from "@/utils/withAuth";
 
 export const router = createBrowserRouter([
   {
@@ -45,7 +46,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout),
     path: "/admin",
     errorElement: <ErrorPage />,
     children: [
@@ -54,7 +55,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout),
     path: "/user",
     errorElement: <ErrorPage />,
     children: [
@@ -63,7 +64,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout),
     path: "/agent",
     errorElement: <ErrorPage />,
     children: [

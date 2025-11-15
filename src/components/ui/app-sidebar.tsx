@@ -17,14 +17,15 @@ import { getSidebarItems } from "@/utils/getSidebarItems";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useMyInfoQuery } from "@/redux/features/user/user.api";
+import ZapWalletLoader from "@/utils/ZapWalletLoader";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: userData } = useMyInfoQuery(undefined);
+  const { data: userData, isLoading } = useMyInfoQuery(undefined);
 
   const data = {
     navMain: getSidebarItems(userData?.data?.role),
   };
-  
+  if (isLoading) return <ZapWalletLoader />;
 
   return (
     <Sidebar {...props} className="border-r-2 border-[#009689]">

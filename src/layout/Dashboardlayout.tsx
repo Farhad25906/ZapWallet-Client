@@ -7,9 +7,16 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useMyInfoQuery } from "@/redux/features/user/user.api";
+import ZapWalletLoader from "@/utils/ZapWalletLoader";
 import { Outlet } from "react-router";
 
 export default function DashboardLayout() {
+      const { data, isLoading } = useMyInfoQuery(undefined);
+      if (!isLoading && !data?.data?.email) {
+      return <ZapWalletLoader/>;
+    }
+
   return (
     <SidebarProvider>
       <AppSidebar />
