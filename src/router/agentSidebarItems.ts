@@ -1,4 +1,4 @@
-import Balance from "@/Pages/AdminPages/Balance";
+
 import CashIn from "@/Pages/AgentPages/CashIn";
 import Commission from "@/Pages/AgentPages/Commission";
 import Profile from "@/Pages/SharedPages/Profile";
@@ -15,6 +15,7 @@ import {
   Shield,
 } from "lucide-react";
 import React from "react";
+import Balance from "@/Pages/SharedPages/Balance";
 
 export const agentSidebarItems: ISidebarItem[] = [
   {

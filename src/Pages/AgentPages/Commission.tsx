@@ -1,4 +1,4 @@
-// Commission.tsx (Agent Page) - FIXED VERSION
+// Commission.tsx (Agent Page) - RESPONSIVE VERSION
 import {
   useAgentCommissionTotalQuery,
   useAgentCommissionTransactionQuery,
@@ -58,22 +58,20 @@ const Commission = () => {
     });
   };
 
-
   if (loadingCommission) return <ZapWalletLoader />;
 
   if (commissionError || transactionError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-3 sm:p-4 md:p-6 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-red-600 mb-2">
             Error Loading Data
           </h2>
-          <p className="text-slate-600">Please try again later</p>
+          <p className="text-sm sm:text-base text-slate-600">Please try again later</p>
         </div>
       </div>
     );
   }
-
 
   const commission: ICommissionSummary = commissionData || {
     totalCommission: 0,
@@ -94,61 +92,60 @@ const Commission = () => {
   const totalPages = transactionsData.totalPages || 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 className="text-4xl font-black text-[#009689]">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#009689]">
               Commission Dashboard
             </h1>
-            <p className="text-slate-600 mt-1">
+            <p className="text-sm sm:text-base text-slate-600 mt-1">
               Track your commission earnings
             </p>
           </div>
-          <Badge className="bg-[#ffd8af] text-[#009689] hover:bg-[#ffd8af] font-bold text-base px-4 py-2">
-            <PieChart className="w-4 h-4 mr-2" />
+          <Badge className="bg-[#ffd8af] text-[#009689] hover:bg-[#ffd8af] font-bold text-sm sm:text-base px-3 sm:px-4 py-1.5 sm:py-2 w-fit">
+            <PieChart className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
             Agent Commission
           </Badge>
         </div>
 
-
-        <div className="">
-          {/* Total Commission */}
+        {/* Total Commission Card */}
+        <div>
           <Card className="border-2 border-[#009689]/20 hover:shadow-2xl transition-all bg-gradient-to-br from-[#009689] to-[#00c4b4] text-white">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-sm font-semibold text-white/80">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <p className="text-xs sm:text-sm font-semibold text-white/80">
                   Total Commission
                 </p>
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
               </div>
-              <p className="text-4xl font-black mb-1">
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-black mb-1 truncate">
                 ৳{agentTotalCommission.toLocaleString()}
               </p>
-              <p className="text-sm text-white/80">All Time Earnings</p>
+              <p className="text-xs sm:text-sm text-white/80">All Time Earnings</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Commission Transactions */}
         <Card className="border-2 border-[#009689]/20">
-          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl font-black text-[#009689] flex items-center gap-2">
-                <DollarSign className="w-6 h-6" />
-                Commission Transactions
+          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <CardTitle className="text-lg sm:text-xl lg:text-2xl font-black text-[#009689] flex items-center gap-2 flex-wrap">
+                <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span>Commission Transactions</span>
                 {isFetching && (
-                  <Badge variant="secondary" className="ml-2 animate-pulse">
+                  <Badge variant="secondary" className="animate-pulse text-xs">
                     Loading...
                   </Badge>
                 )}
               </CardTitle>
               <Badge
                 variant="outline"
-                className="font-bold text-[#009689] border-[#009689]"
+                className="font-bold text-[#009689] border-[#009689] w-fit text-xs sm:text-sm"
               >
                 {transactionsData.total} Total
               </Badge>
@@ -156,18 +153,18 @@ const Commission = () => {
           </CardHeader>
           <CardContent className="p-0">
             {loadingTransactions && currentPage === 1 ? (
-              <div className="flex justify-center py-16">
+              <div className="flex justify-center py-12 sm:py-16">
                 <ZapWalletLoader />
               </div>
             ) : transactions.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="w-10 h-10 text-slate-400" />
+              <div className="text-center py-12 sm:py-16 px-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <DollarSign className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" />
                 </div>
-                <p className="text-slate-600 font-semibold text-lg">
+                <p className="text-slate-600 font-semibold text-base sm:text-lg">
                   No commission transactions yet
                 </p>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
                   Your commission earnings will appear here
                 </p>
               </div>
@@ -176,28 +173,28 @@ const Commission = () => {
                 {transactions.map((transaction: ICommissionTransaction) => (
                   <div
                     key={`${transaction._id}-${currentPage}`}
-                    className="p-6 hover:bg-[#009689]/5 transition-colors"
+                    className="p-4 sm:p-6 hover:bg-[#009689]/5 transition-colors"
                   >
-                    <div className="flex items-center justify-between">
-
-                      <div className="flex items-start gap-4 flex-1">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                      {/* Left Side - Transaction Details */}
+                      <div className="flex items-start gap-3 sm:gap-4 flex-1">
                         <div
-                          className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                          className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${
                             transaction.type === "CASH_OUT"
                               ? "bg-red-100"
                               : "bg-blue-100"
                           }`}
                         >
                           {transaction.type === "CASH_OUT" ? (
-                            <ArrowUpRight className="w-7 h-7 text-red-600" />
+                            <ArrowUpRight className="w-6 h-6 sm:w-7 sm:h-7 text-red-600" />
                           ) : (
-                            <Send className="w-7 h-7 text-blue-600" />
+                            <Send className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h3 className="font-black text-lg text-slate-900">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <h3 className="font-black text-base sm:text-lg text-slate-900">
                               {transaction.type.replace(/_/g, " ")}
                             </h3>
                             <Badge
@@ -205,40 +202,40 @@ const Commission = () => {
                                 transaction.type === "CASH_OUT"
                                   ? "bg-red-500"
                                   : "bg-blue-500"
-                              } text-white font-semibold`}
+                              } text-white font-semibold text-xs`}
                             >
                               Agent Commission
                             </Badge>
                           </div>
 
                           {/* From & To Users */}
-                          <div className="grid md:grid-cols-2 gap-4 mb-2">
-                            <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-2">
+                            <div className="bg-red-50 rounded-lg p-2.5 sm:p-3 border border-red-200">
                               <p className="text-xs font-bold text-red-900 mb-1">
                                 From (User)
                               </p>
-                              <p className="text-sm font-bold text-slate-900">
+                              <p className="text-sm font-bold text-slate-900 truncate">
                                 {transaction.from.name}
                               </p>
-                              <p className="text-xs text-slate-600">
+                              <p className="text-xs text-slate-600 truncate">
                                 {transaction.from.phone}
                               </p>
                             </div>
-                            <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+                            <div className="bg-green-50 rounded-lg p-2.5 sm:p-3 border border-green-200">
                               <p className="text-xs font-bold text-green-900 mb-1">
                                 To (You)
                               </p>
-                              <p className="text-sm font-bold text-slate-900">
+                              <p className="text-sm font-bold text-slate-900 truncate">
                                 {transaction.to.name}
                               </p>
-                              <p className="text-xs text-slate-600">
+                              <p className="text-xs text-slate-600 truncate">
                                 {transaction.to.phone}
                               </p>
                             </div>
                           </div>
 
                           {/* Commission Breakdown */}
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
                             <Badge variant="outline" className="text-xs">
                               Your Commission: ৳
                               {transaction.commission.agentCommission}
@@ -254,26 +251,26 @@ const Commission = () => {
                             )}
                           </div>
 
-                          <div className="flex items-center gap-2 mt-2 text-sm text-slate-600">
-                            <Calendar className="w-4 h-4" />
-                            {formatDate(transaction.createdAt)}
+                          <div className="flex items-center gap-2 mt-2 text-xs sm:text-sm text-slate-600">
+                            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+                            <span className="truncate">{formatDate(transaction.createdAt)}</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Right Side - Amount & Commission */}
-                      <div className="text-right ml-4">
+                      <div className="text-left lg:text-right lg:ml-4 pl-14 sm:pl-16 lg:pl-0">
                         <p className="text-xs font-semibold text-slate-600 mb-1">
                           Transaction Amount
                         </p>
-                        <p className="text-2xl font-black text-slate-900 mb-2">
+                        <p className="text-xl sm:text-2xl font-black text-slate-900 mb-2 truncate">
                           ৳{transaction.amount.toLocaleString()}
                         </p>
-                        <div className="bg-[#009689]/10 rounded-lg px-3 py-2 border-2 border-[#009689]">
+                        <div className="bg-[#009689]/10 rounded-lg px-3 py-2 border-2 border-[#009689] inline-block">
                           <p className="text-xs font-semibold text-[#009689] mb-1">
                             Your Commission
                           </p>
-                          <p className="text-xl font-black text-[#009689]">
+                          <p className="text-lg sm:text-xl font-black text-[#009689]">
                             +৳{transaction.commission.agentCommission}
                           </p>
                         </div>
@@ -288,55 +285,53 @@ const Commission = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-end mt-4">
-            <div>
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => {
-                        if (currentPage > 1) {
-                          setCurrentPage(currentPage - 1);
-                        }
-                      }}
-                      className={
-                        currentPage === 1
-                          ? "pointer-events-none opacity-50"
-                          : "cursor-pointer"
+          <div className="flex justify-center sm:justify-end mt-4">
+            <Pagination>
+              <PaginationContent className="flex-wrap gap-1">
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => {
+                      if (currentPage > 1) {
+                        setCurrentPage(currentPage - 1);
                       }
-                    />
+                    }}
+                    className={
+                      currentPage === 1
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }
+                  />
+                </PaginationItem>
+                {Array.from(
+                  { length: totalPages },
+                  (_, index) => index + 1
+                ).map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      isActive={currentPage === page}
+                      onClick={() => setCurrentPage(page)}
+                      className="cursor-pointer"
+                    >
+                      {page}
+                    </PaginationLink>
                   </PaginationItem>
-                  {Array.from(
-                    { length: totalPages },
-                    (_, index) => index + 1
-                  ).map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink
-                        isActive={currentPage === page}
-                        onClick={() => setCurrentPage(page)}
-                        className="cursor-pointer"
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => {
-                        if (currentPage < totalPages) {
-                          setCurrentPage(currentPage + 1);
-                        }
-                      }}
-                      className={
-                        currentPage === totalPages
-                          ? "pointer-events-none opacity-50"
-                          : "cursor-pointer"
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => {
+                      if (currentPage < totalPages) {
+                        setCurrentPage(currentPage + 1);
                       }
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+                    }}
+                    className={
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer"
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
       </div>

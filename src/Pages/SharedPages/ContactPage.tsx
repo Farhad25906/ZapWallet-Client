@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +16,7 @@ const ContactPage = () => {
     subject: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
 
   const contactInfo = [
@@ -49,18 +50,29 @@ const ContactPage = () => {
     },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setResult("Sending...");
 
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
+    const formDataToSend = new FormData();
+    formDataToSend.append("access_key", "0778716b-f323-47d3-b275-ef1cf89f2f6e");
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("subject", formData.subject);
+    formDataToSend.append("message", formData.message);
 
-      // Reset form after 3 seconds
-      setTimeout(() => {
-        setSubmitted(false);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
         setFormData({
           name: "",
           email: "",
@@ -68,15 +80,28 @@ const ContactPage = () => {
           subject: "",
           message: "",
         });
-      }, 3000);
-    }, 1500);
+        
+        setTimeout(() => {
+          setResult("");
+        }, 5000);
+      } else {
+        setResult("Error submitting form. Please try again.");
+      }
+    } catch (error) {
+      setResult("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    
+    // Clear any existing messages when user starts typing
+    if (result) setResult("");
   };
 
   return (
@@ -99,87 +124,7 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Quick Support Cards Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="grid lg:grid-cols-3 gap-12 items-start">
-            {/* Quick Support */}
-            <Card className="border-2 border-[#ffd8af] bg-[#ffd8af]/10">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-black text-[#009689] mb-4">
-                  Need Immediate Help?
-                </h3>
-                <p className="text-slate-700 mb-6">
-                  For urgent matters, you can reach our support team directly
-                  through these channels:
-                </p>
-                <div className="space-y-4">
-                  <Button
-                    className="w-full justify-start bg-[#009689] hover:bg-[#007a6e] text-white"
-                    size="lg"
-                  >
-                    <Phone className="mr-3 w-5 h-5" />
-                    Call Support: +880 1234-567890
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white"
-                    size="lg"
-                  >
-                    <Mail className="mr-3 w-5 h-5" />
-                    Email: support@zapwallet.com
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
 
-            {/* FAQ Link */}
-            <Card className="border-2 border-[#009689] hover:shadow-xl transition-all duration-300">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-black text-[#009689] mb-4">
-                  Frequently Asked Questions
-                </h3>
-                <p className="text-slate-700 mb-6">
-                  Looking for quick answers? Check out our FAQ section for
-                  common questions about ZapWallet services.
-                </p>
-                <Button
-                  className="w-full bg-white border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white font-bold"
-                  size="lg"
-                >
-                  Visit FAQ Page
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Business Hours */}
-            <Card className="border-2 hover:border-[#ffd8af] transition-all duration-300">
-              <CardContent className="p-8">
-                <Clock className="w-12 h-12 text-[#009689] mb-4" />
-                <h3 className="text-xl font-bold text-slate-900 mb-4">
-                  Business Hours
-                </h3>
-                <div className="space-y-2 text-slate-700">
-                  <div className="flex justify-between">
-                    <span className="font-semibold">Monday - Friday</span>
-                    <span>9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-semibold">Saturday</span>
-                    <span>10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-semibold">Sunday</span>
-                    <span className="text-red-600">Closed</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Info Cards */}
       <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-6 md:px-12 lg:px-20">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
@@ -210,7 +155,6 @@ const ContactPage = () => {
             ))}
           </div>
 
-          {/* Contact Form Section */}
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
               <h2 className="text-4xl font-black text-[#009689] mb-4">
@@ -221,7 +165,7 @@ const ContactPage = () => {
                 hours.
               </p>
 
-              {submitted ? (
+              {result === "Form Submitted Successfully" ? (
                 <div className="bg-[#009689]/10 border-2 border-[#009689] rounded-2xl p-8 text-center">
                   <CheckCircle className="w-16 h-16 text-[#009689] mx-auto mb-4" />
                   <h3 className="text-2xl font-bold text-[#009689] mb-2">
@@ -329,10 +273,21 @@ const ContactPage = () => {
                     />
                   </div>
 
+                  {/* Result Message */}
+                  {result && result !== "Form Submitted Successfully" && (
+                    <div className={`p-4 rounded-lg text-center ${
+                      result.includes("Error") || result.includes("error") 
+                        ? "bg-red-100 text-red-700 border border-red-300" 
+                        : "bg-blue-100 text-blue-700 border border-blue-300"
+                    }`}>
+                      {result}
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[#009689] hover:bg-[#007a6e] text-white py-6 text-lg font-bold shadow-xl hover:shadow-2xl transition-all"
+                    className="w-full bg-[#009689] hover:bg-[#007a6e] text-white py-6 text-lg font-bold shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       "Sending..."

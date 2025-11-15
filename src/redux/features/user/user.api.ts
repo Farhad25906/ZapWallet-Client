@@ -9,6 +9,13 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["USER"],
     }),
+    getEmail: builder.query({
+      query: (phone) => ({
+        url: `/user/${phone}`,
+        method: "GET",
+      }),
+      providesTags: ["USER"],
+    }),
     pendingAgents: builder.query({
       query: () => ({
         url: "/user/pending-agents",
@@ -63,8 +70,8 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["USER"],
     }),
-     myDataUpdate: builder.mutation({
-      query:  (data) => ({
+    myDataUpdate: builder.mutation({
+      query: (data) => ({
         url: `/user/myInfo`,
         method: "PATCH",
         data: data,
@@ -85,5 +92,6 @@ export const {
   useAllUsersQuery,
   useChangeActivityStatusMutation,
   useMyInfoUpdateMutation,
-  useMyDataUpdateMutation
+  useMyDataUpdateMutation,
+  useGetEmailQuery
 } = userApi;

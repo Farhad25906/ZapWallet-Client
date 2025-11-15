@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { Briefcase, Users } from "lucide-react";
+export type RoleType = "user" | "agent";
 
 interface RoleSelectionDialogProps {
   open: boolean;
-  onRoleSelect: (role: "user" | "agent") => void;
+  onRoleSelect: (role: RoleType) => void;
 }
 
 export function RoleSelectionDialog({ open, onRoleSelect }: RoleSelectionDialogProps) {

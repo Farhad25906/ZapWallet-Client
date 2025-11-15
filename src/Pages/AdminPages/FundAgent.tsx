@@ -193,41 +193,41 @@ const FundAgent: React.FC = () => {
   const amountValue = parseFloat(formData.amount as string) || 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-3 sm:p-4 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-[#009689] flex items-center justify-center">
-              <Wallet className="w-6 h-6 text-white" />
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#009689] flex items-center justify-center">
+              <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-black text-[#009689]">
+            <div className="text-center sm:text-left">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#009689]">
                 Fund Agent
               </h1>
-              <p className="text-slate-600 mt-1 text-sm md:text-base">
+              <p className="text-slate-600 mt-1 text-sm sm:text-base">
                 Add money to agent wallet
               </p>
             </div>
           </div>
 
-          <div className="inline-flex items-center gap-1 bg-[#009689] text-white font-semibold px-3 py-1 rounded-full text-sm shadow-sm hover:shadow-md transition-all">
-            <span className="text-xl">💸</span>
+          <div className="inline-flex items-center gap-1 bg-[#009689] text-white font-semibold px-3 py-1 rounded-full text-xs sm:text-sm shadow-sm hover:shadow-md transition-all w-full sm:w-auto justify-center">
+            <span className="text-lg sm:text-xl">💸</span>
             Admin → Agent Transfer
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Form Card */}
           <Card className="border-2 border-[#009689]/20">
             <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-              <CardTitle className="text-xl font-black text-[#009689] flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
+              <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
+                <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />
                 Transfer Details
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-6">
+            <CardContent className="p-4 sm:p-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Agent Phone Number */}
                 <div className="space-y-2">
                   <Label
@@ -237,7 +237,7 @@ const FundAgent: React.FC = () => {
                     Agent Wallet Number
                   </Label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
                     <Input
                       id="agentWalletNumber"
                       name="agentWalletNumber"
@@ -245,13 +245,13 @@ const FundAgent: React.FC = () => {
                       placeholder="+88012345678901"
                       value={formData.agentWalletNumber}
                       onChange={handleChange}
-                      className="pl-12 border-2 focus:border-[#009689] text-base font-semibold"
+                      className="pl-10 sm:pl-12 border-2 focus:border-[#009689] text-sm sm:text-base font-semibold"
                     />
                   </div>
                   {errors.agentWalletNumber && (
                     <Alert variant="destructive" className="py-2">
                       <AlertCircle className="w-4 h-4" />
-                      <AlertDescription>
+                      <AlertDescription className="text-xs sm:text-sm">
                         {errors.agentWalletNumber}
                       </AlertDescription>
                     </Alert>
@@ -270,7 +270,7 @@ const FundAgent: React.FC = () => {
                     Amount (৳)
                   </Label>
                   <div className="relative">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
                     <Input
                       id="amount"
                       name="amount"
@@ -278,13 +278,15 @@ const FundAgent: React.FC = () => {
                       placeholder="0.00"
                       value={formData.amount}
                       onChange={handleChange}
-                      className="pl-12 border-2 focus:border-[#009689] text-2xl font-bold text-[#009689]"
+                      className="pl-10 sm:pl-12 border-2 focus:border-[#009689] text-xl sm:text-2xl font-bold text-[#009689]"
                     />
                   </div>
                   {errors.amount && (
                     <Alert variant="destructive" className="py-2">
                       <AlertCircle className="w-4 h-4" />
-                      <AlertDescription>{errors.amount}</AlertDescription>
+                      <AlertDescription className="text-xs sm:text-sm">
+                        {errors.amount}
+                      </AlertDescription>
                     </Alert>
                   )}
                   <div className="flex items-center justify-between text-xs text-slate-600">
@@ -298,14 +300,14 @@ const FundAgent: React.FC = () => {
                   <Label className="text-sm font-bold text-slate-700">
                     Quick Amount
                   </Label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {[1000, 5000, 10000, 50000].map((amount) => (
                       <Button
                         key={amount}
                         type="button"
                         variant="outline"
                         onClick={() => handleQuickAmount(amount)}
-                        className="border-2 border-[#009689]/30 hover:bg-[#009689] hover:text-white font-bold"
+                        className="border-2 border-[#009689]/30 hover:bg-[#009689] hover:text-white font-bold text-xs sm:text-sm py-2 h-auto"
                       >
                         {amount >= 1000 ? `${amount / 1000}K` : amount}
                       </Button>
@@ -317,10 +319,10 @@ const FundAgent: React.FC = () => {
                 <Button
                   onClick={handlePreview}
                   disabled={!formData.agentWalletNumber || !formData.amount}
-                  className="w-full bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-6 text-lg"
+                  className="w-full bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-4 sm:py-6 text-base sm:text-lg"
                 >
                   Preview Transaction
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
                 </Button>
               </div>
             </CardContent>
@@ -341,58 +343,58 @@ const FundAgent: React.FC = () => {
                   : "bg-slate-100"
               }`}
             >
-              <CardTitle className="text-xl font-black text-[#009689] flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
+              <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                 {showConfirmation
                   ? "Confirm Transaction"
                   : "Transaction Preview"}
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               {showConfirmation ? (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {/* Transaction Summary */}
-                  <div className="bg-white rounded-xl p-6 border-2 border-[#009689]/20 space-y-4">
-                    <div className="flex items-center justify-between pb-4 border-b-2 border-[#ffd8af]/30">
-                      <span className="text-sm font-semibold text-slate-600">
+                  <div className="bg-white rounded-xl p-4 sm:p-6 border-2 border-[#009689]/20 space-y-3 sm:space-y-4">
+                    <div className="flex items-center justify-between pb-3 sm:pb-4 border-b-2 border-[#ffd8af]/30">
+                      <span className="text-xs sm:text-sm font-semibold text-slate-600">
                         From
                       </span>
                       <div className="text-right">
-                        <p className="font-bold text-slate-900">
+                        <p className="font-bold text-slate-900 text-sm sm:text-base">
                           Admin Account
                         </p>
-                        <Badge className="bg-[#009689] text-white hover:bg-[#009689] mt-1">
+                        <Badge className="bg-[#009689] text-white hover:bg-[#009689] mt-1 text-xs">
                           SUPER_ADMIN
                         </Badge>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pb-4 border-b-2 border-[#ffd8af]/30">
-                      <span className="text-sm font-semibold text-slate-600">
+                    <div className="flex items-center justify-between pb-3 sm:pb-4 border-b-2 border-[#ffd8af]/30">
+                      <span className="text-xs sm:text-sm font-semibold text-slate-600">
                         To
                       </span>
                       <div className="text-right">
-                        <p className="font-bold text-slate-900">
+                        <p className="font-bold text-slate-900 text-sm sm:text-base">
                           Agent Account
                         </p>
-                        <p className="text-sm text-slate-600 font-mono mt-1">
+                        <p className="text-xs text-slate-600 font-mono mt-1 break-all">
                           {formData.agentWalletNumber}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pb-4">
-                      <span className="text-sm font-semibold text-slate-600">
+                    <div className="flex items-center justify-between pb-3 sm:pb-4">
+                      <span className="text-xs sm:text-sm font-semibold text-slate-600">
                         Amount
                       </span>
-                      <p className="text-3xl font-black text-[#009689]">
+                      <p className="text-2xl sm:text-3xl font-black text-[#009689]">
                         ৳{amountValue.toLocaleString()}
                       </p>
                     </div>
 
                     <Alert className="bg-[#ffd8af]/10 border-[#ffd8af]/30">
-                      <AlertCircle className="w-5 h-5 text-[#009689]" />
-                      <AlertDescription>
+                      <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
+                      <AlertDescription className="text-xs sm:text-sm">
                         <p className="font-bold text-slate-900 mb-1">
                           Important
                         </p>
@@ -406,17 +408,17 @@ const FundAgent: React.FC = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <Button
                       onClick={handleSubmit}
                       disabled={isLoading}
-                      className="flex-1 bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-6 text-lg"
+                      className="flex-1 bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-4 sm:py-6 text-base sm:text-lg"
                     >
                       {isLoading ? (
                         "Processing..."
                       ) : (
                         <>
-                          <CheckCircle className="w-5 h-5 mr-2" />
+                          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                           Confirm & Send
                         </>
                       )}
@@ -425,21 +427,21 @@ const FundAgent: React.FC = () => {
                       onClick={handleCancel}
                       disabled={isLoading}
                       variant="outline"
-                      className="border-2 border-slate-300 font-bold py-6"
+                      className="border-2 border-slate-300 font-bold py-4 sm:py-6 text-base sm:text-lg"
                     >
                       Cancel
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center mb-4">
-                    <User className="w-10 h-10 text-slate-400" />
+                <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-center">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-slate-200 flex items-center justify-center mb-4">
+                    <User className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" />
                   </div>
-                  <p className="text-slate-600 font-semibold mb-2">
+                  <p className="text-slate-600 font-semibold mb-2 text-sm sm:text-base">
                     Fill in the details
                   </p>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-xs sm:text-sm text-slate-500 px-4">
                     Enter agent wallet number and amount to preview the
                     transaction
                   </p>
@@ -450,22 +452,22 @@ const FundAgent: React.FC = () => {
         </div>
 
         {/* Info Section */}
-        <Card className="mt-6 border-2 border-[#009689]/20">
-          <CardContent className="p-6">
-            <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-[#009689]" />
+        <Card className="mt-4 sm:mt-6 border-2 border-[#009689]/20">
+          <CardContent className="p-4 sm:p-6">
+            <h3 className="font-bold text-slate-900 mb-3 sm:mb-4 flex items-center gap-2 justify-center sm:justify-start text-sm sm:text-base">
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
               Transaction Information
             </h3>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-xs sm:text-sm">
+              <div className="text-center sm:text-left">
                 <p className="text-slate-600 mb-1">⚡ Processing Time</p>
                 <p className="font-bold text-slate-900">Instant</p>
               </div>
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="text-slate-600 mb-1">💰 Transaction Fee</p>
                 <p className="font-bold text-slate-900">FREE</p>
               </div>
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="text-slate-600 mb-1">🔒 Security</p>
                 <p className="font-bold text-slate-900">Encrypted</p>
               </div>

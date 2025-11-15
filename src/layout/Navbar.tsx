@@ -15,6 +15,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -54,7 +55,9 @@ export default function Navbar() {
     await logout(undefined);
     dispatch(authApi.util.resetApiState());
   };
+
   if (isLoading) return <ZapWalletLoader />;
+  
   return (
     <header className="border-b bg-white">
       <div className="container mx-auto px-4 flex items-center justify-between gap-4 py-3">
@@ -104,6 +107,7 @@ export default function Navbar() {
           {/* Auth Section */}
           {data?.data?.email ? (
             <div className="flex items-center gap-2">
+              {/* Avatar Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -122,6 +126,23 @@ export default function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
+                  {/* Show navigation links only in mobile dropdown */}
+                  <div className="md:hidden">
+                    {navigationLinks.map((link, index) => (
+                      <React.Fragment key={index}>
+                        {(link.role === "PUBLIC" || link.role === data?.data?.role) && (
+                          <DropdownMenuItem asChild>
+                            <Link to={link.href} className="cursor-pointer w-full">
+                              {link.label}
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                      </React.Fragment>
+                    ))}
+                    <DropdownMenuSeparator className="md:hidden" />
+                  </div>
+                  
+                  {/* Dashboard Links - Show for all screen sizes */}
                   {(data.data.role === role.super_admin ||
                     data.data.role === role.admin) && (
                     <DropdownMenuItem asChild>
@@ -134,22 +155,16 @@ export default function Navbar() {
                     <DropdownMenuItem
                       className="cursor-pointer"
                       onClick={() => {
-                        if (
-                          data.data.agentInfo?.approvalStatus === "pending" ||
-                          data.data.agentInfo?.approvalStatus === "rejected" ||
-                          data.data.agentInfo?.approvalStatus === "suspended"
-                        ) {
+                        if (data.data.agentInfo?.approvalStatus !== "approved") {
                           setShowPendingModal(true);
                         }
                       }}
-                      asChild={
-                        data.data.agentInfo?.approvalStatus === "approved"
-                      }
+                      asChild={data.data.agentInfo?.approvalStatus === "approved"}
                     >
                       {data.data.agentInfo?.approvalStatus === "approved" ? (
-                        <span>Dashboard</span>
-                      ) : (
                         <Link to="/agent">Dashboard</Link>
+                      ) : (
+                        <span>Dashboard</span>
                       )}
                     </DropdownMenuItem>
                   )}
@@ -160,6 +175,9 @@ export default function Navbar() {
                       </Link>
                     </DropdownMenuItem>
                   )}
+                  
+                  <DropdownMenuSeparator />
+                  
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="text-red-600 focus:text-red-600 cursor-pointer"
@@ -171,73 +189,72 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Button
-                asChild
-                variant="outline"
-                className="text-sm font-semibold border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white transition-all"
-              >
-                <Link to="/register">Register</Link>
-              </Button>
-              <Button
-                asChild
-                className="text-sm font-semibold bg-[#009689] hover:bg-[#007a6e] text-white transition-all"
-              >
-                <Link to="/login">Login</Link>
-              </Button>
-            </div>
-          )}
-
-          {/* Mobile menu trigger */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                className="group size-8 md:hidden text-[#009689]"
-                variant="ghost"
-                size="icon"
-              >
-                <svg
-                  className="pointer-events-none"
-                  width={16}
-                  height={16}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  xmlns="http://www.w3.org/2000/svg"
+              {/* Desktop Auth Buttons */}
+              <div className="max-md:hidden flex items-center gap-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="text-sm font-semibold border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white transition-all"
                 >
-                  <path
-                    d="M4 12L20 12"
-                    className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
-                  />
-                  <path
-                    d="M4 12H20"
-                    className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
-                  />
-                  <path
-                    d="M4 12H20"
-                    className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
-                  />
-                </svg>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-48 p-2 md:hidden">
-              <div className="flex flex-col gap-2">
-                {navigationLinks.map((link, index) => (
-                  <Button
-                    key={index}
-                    asChild
-                    variant="ghost"
-                    className="justify-start text-slate-600 hover:text-[#009689] hover:bg-[#ffd8af]/20"
-                  >
-                    <Link to={link.href}>{link.label}</Link>
-                  </Button>
-                ))}
+                  <Link to="/register">Register</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="text-sm font-semibold bg-[#009689] hover:bg-[#007a6e] text-white transition-all"
+                >
+                  <Link to="/login">Login</Link>
+                </Button>
+              </div>
 
-                {/* Mobile Auth Links */}
-                {!data?.data?.email && (
-                  <>
+              {/* Mobile menu trigger - Only show when user is NOT logged in */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    className="group size-8 md:hidden text-[#009689]"
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <svg
+                      className="pointer-events-none"
+                      width={16}
+                      height={16}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4 12L20 12"
+                        className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+                      />
+                      <path
+                        d="M4 12H20"
+                        className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
+                      />
+                      <path
+                        d="M4 12H20"
+                        className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+                      />
+                    </svg>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-48 p-2 md:hidden">
+                  <div className="flex flex-col gap-2">
+                    {navigationLinks.map((link, index) => (
+                      <Button
+                        key={index}
+                        asChild
+                        variant="ghost"
+                        className="justify-start text-slate-600 hover:text-[#009689] hover:bg-[#ffd8af]/20"
+                      >
+                        <Link to={link.href}>{link.label}</Link>
+                      </Button>
+                    ))}
+
+                    {/* Mobile Auth Links */}
                     <Button
                       asChild
                       className="justify-start bg-[#009689] hover:bg-[#007a6e] text-white"
@@ -251,11 +268,11 @@ export default function Navbar() {
                     >
                       <Link to="/register">Register</Link>
                     </Button>
-                  </>
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          )}
         </div>
       </div>
       <Dialog open={showPendingModal} onOpenChange={setShowPendingModal}>
@@ -266,7 +283,7 @@ export default function Navbar() {
             </DialogTitle>
             <DialogDescription className="text-center text-lg mt-4">
               Your agent account is currently {data?.data?.agentInfo?.approvalStatus}. Please
-             contact support for more information.
+              contact support for more information.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 mt-6">
@@ -279,6 +296,12 @@ export default function Navbar() {
                 className="bg-[#009689] hover:bg-[#007a6e]"
               >
                 <Link to="/contact">Contact Admin</Link>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowPendingModal(false)}
+              >
+                Close
               </Button>
             </div>
           </div>

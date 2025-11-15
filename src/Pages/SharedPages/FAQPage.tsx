@@ -5,11 +5,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-const FAQPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [openItems, setOpenItems] = useState([]);
+// Define types
+type FAQItem = {
+  question: string;
+  answer: string;
+};
 
-  const faqCategories = [
+type FAQCategory = {
+  category: string;
+  color: string;
+  questions: FAQItem[];
+};
+
+type OpenItems = string[];
+type CategoryIndex = number;
+type QuestionIndex = number;
+
+const FAQPage = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [openItems, setOpenItems] = useState<OpenItems>([]);
+
+  const faqCategories: FAQCategory[] = [
     {
       category: "Getting Started",
       color: "bg-[#009689]",
@@ -72,45 +88,9 @@ const FAQPage = () => {
         }
       ]
     },
-    {
-      category: "Agent Services",
-      color: "bg-[#ffd8af]",
-      questions: [
-        {
-          question: "How do I find a nearby agent?",
-          answer: "Use the 'Find Agent' feature in the app to see all nearby agent locations on a map. You can also filter by services offered (Cash In/Cash Out) and see their working hours. We have over 50,000 agents nationwide."
-        },
-        {
-          question: "What do I need to cash in at an agent?",
-          answer: "To cash in, visit any ZapWallet agent with your cash and phone. The agent will request your phone number, you'll enter your PIN to confirm, and the money is instantly added to your digital balance. It's that simple!"
-        },
-        {
-          question: "How do I become a ZapWallet agent?",
-          answer: "To become an agent, you need a business location, initial capital (minimum ৳50,000), and valid business registration. Apply through our website or call +880 1234-567890. Our team will guide you through the process and provide training."
-        }
-      ]
-    },
-    {
-      category: "Technical Support",
-      color: "bg-[#009689]",
-      questions: [
-        {
-          question: "The app isn't working properly. What should I do?",
-          answer: "First, try closing and reopening the app. If that doesn't work, check if you have the latest version in your app store. Clear the app cache in your phone settings, or uninstall and reinstall the app. If issues persist, contact our support team."
-        },
-        {
-          question: "Can I use ZapWallet on multiple devices?",
-          answer: "Yes! You can log into your ZapWallet account on multiple devices. However, for security reasons, you'll need to verify each new device with an OTP. You can see all active sessions in Settings > Security > Active Devices."
-        },
-        {
-          question: "What happens if a transaction fails?",
-          answer: "If a transaction fails, the money is automatically returned to your account within minutes. You'll receive a notification explaining why it failed. If the money doesn't return within 24 hours, contact support with your transaction ID for immediate assistance."
-        }
-      ]
-    }
   ];
 
-  const toggleItem = (categoryIndex, questionIndex) => {
+  const toggleItem = (categoryIndex: CategoryIndex, questionIndex: QuestionIndex): void => {
     const itemKey = `${categoryIndex}-${questionIndex}`;
     setOpenItems(prev => 
       prev.includes(itemKey) 
@@ -119,7 +99,7 @@ const FAQPage = () => {
     );
   };
 
-  const isOpen = (categoryIndex, questionIndex) => {
+  const isOpen = (categoryIndex: CategoryIndex, questionIndex: QuestionIndex): boolean => {
     return openItems.includes(`${categoryIndex}-${questionIndex}`);
   };
 
@@ -155,7 +135,7 @@ const FAQPage = () => {
                 type="text"
                 placeholder="Search for answers..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                 className="pl-12 pr-4 py-6 text-lg border-2 border-white/20 bg-white/10 text-white placeholder:text-white/60 focus:border-white focus:bg-white/20"
               />
             </div>
@@ -252,26 +232,6 @@ const FAQPage = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Stats */}
-      <section className="py-20 bg-[#009689] text-white">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center">
-            <div>
-              <div className="text-5xl font-black mb-2">24/7</div>
-              <div className="text-white/80 text-lg">Support Available</div>
-            </div>
-            <div>
-              <div className="text-5xl font-black mb-2">&lt;5min</div>
-              <div className="text-white/80 text-lg">Average Response Time</div>
-            </div>
-            <div>
-              <div className="text-5xl font-black mb-2">98%</div>
-              <div className="text-white/80 text-lg">Customer Satisfaction</div>
-            </div>
           </div>
         </div>
       </section>

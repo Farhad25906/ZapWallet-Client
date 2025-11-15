@@ -3,13 +3,16 @@ import { Link } from "react-router";
 import Logo from "@/assets/icons/Logo";
 import { RegisterForm } from "@/components/modules/Authentication/RegisterForm";
 import { useState } from "react";
-import { RoleSelectionDialog } from "@/components/modules/Authentication/RoleSelectionDialog";
+import {
+  RoleSelectionDialog,
+  type RoleType,
+} from "@/components/modules/Authentication/RoleSelectionDialog";
 
 export default function Register() {
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedRole, setSelectedRole] = useState<RoleType | null>(null);
   const [showRoleDialog, setShowRoleDialog] = useState(true);
 
-  const handleRoleSelect = (role) => {
+  const handleRoleSelect = (role: RoleType) => {
     setSelectedRole(role);
     setShowRoleDialog(false);
   };
@@ -34,7 +37,7 @@ export default function Register() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <RegisterForm role={selectedRole}/>
+            <RegisterForm role={selectedRole} />
           </div>
         </div>
       </div>

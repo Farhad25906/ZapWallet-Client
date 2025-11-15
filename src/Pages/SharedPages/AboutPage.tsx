@@ -117,7 +117,7 @@ const AboutPage = () => {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 bg-[#009689] rounded-full flex items-center justify-center text-white font-black text-2xl">
-                    99.9%
+                    99%
                   </div>
                   <div>
                     <div className="font-bold text-xl">Uptime</div>
@@ -200,18 +200,7 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-[#009689] text-white">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20 text-center">
-          <h2 className="text-4xl font-black mb-6">Join Our Journey</h2>
-          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-            Be part of the digital payment revolution
-          </p>
-          <button className="bg-white text-[#009689] px-10 py-4 rounded-lg font-bold text-lg hover:bg-[#ffd8af] transition-all duration-300 shadow-xl">
-            Get Started Today
-          </button>
-        </div>
-      </section>
+    
     </div>
   );
 };

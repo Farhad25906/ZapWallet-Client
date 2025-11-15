@@ -45,7 +45,7 @@ export const authApi = baseApi.injectEndpoints({
         data: userInfo,
       }),
     }),
-   
+    
   }),
 });
 
@@ -55,5 +55,5 @@ export const {
   useRegisterMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
 } = authApi;

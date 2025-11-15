@@ -98,7 +98,7 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
         toast.success(
           `${role === "agent" ? "Agent" : "User"} registered successfully`
         );
-        navigate("/verify", { state: res.data.email });
+        navigate("/verify", { state: res.data.phone });
       }
     } catch (error:any) {
       console.error(error);

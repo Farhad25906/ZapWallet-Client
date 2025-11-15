@@ -24,18 +24,42 @@ import { useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Logo from "@/assets/icons/Logo";
 import { Badge } from "@/components/ui/badge";
+import { useGetEmailQuery } from "@/redux/features/user/user.api";
+import ZapWalletLoader from "@/utils/ZapWalletLoader";
 
 export default function Verify() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [email] = useState(location.state);
+  const [phone] = useState(location.state);
   const [confirmed, setConfirmed] = useState(false);
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
   const [timer, setTimer] = useState(5);
   const [otpValue, setOtpValue] = useState("");
   const [error, setError] = useState("");
+
+  const { data, isLoading } = useGetEmailQuery(phone, {
+    skip: !phone,
+  });
+  const email = data?.data?.email;
+
+  useEffect(() => {
+    if (!email || !confirmed) {
+      return;
+    }
+
+    const timerId = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [email, confirmed]);
+
+  // ✅ Single conditional return at the end
+  if (isLoading) {
+    return <ZapWalletLoader />;
+  }
 
   const handleSendOtp = async () => {
     const toastId = toast.loading("Sending OTP");
@@ -79,22 +103,10 @@ export default function Verify() {
     }
   };
 
-  useEffect(() => {
-    if (!email || !confirmed) {
-      return;
-    }
-
-    const timerId = setInterval(() => {
-      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [email, confirmed]);
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleOtpChange = (value: string) => {
@@ -137,52 +149,60 @@ export default function Verify() {
                     One-Time Password
                   </Label>
                   <div className="flex justify-center">
-                    <InputOTP maxLength={6} value={otpValue} onChange={handleOtpChange}>
+                    <InputOTP
+                      maxLength={6}
+                      value={otpValue}
+                      onChange={handleOtpChange}
+                    >
                       <InputOTPGroup>
-                        <InputOTPSlot 
-                          index={0} 
+                        <InputOTPSlot
+                          index={0}
                           className="border-2 border-[#009689]/30 focus:border-[#009689] h-14 w-12 text-xl font-bold"
                         />
                       </InputOTPGroup>
                       <InputOTPGroup>
-                        <InputOTPSlot 
-                          index={1} 
+                        <InputOTPSlot
+                          index={1}
                           className="border-2 border-[#009689]/30 focus:border-[#009689] h-14 w-12 text-xl font-bold"
                         />
                       </InputOTPGroup>
                       <InputOTPGroup>
-                        <InputOTPSlot 
-                          index={2} 
+                        <InputOTPSlot
+                          index={2}
                           className="border-2 border-[#009689]/30 focus:border-[#009689] h-14 w-12 text-xl font-bold"
                         />
                       </InputOTPGroup>
                       <Dot className="text-[#009689]" />
                       <InputOTPGroup>
-                        <InputOTPSlot 
-                          index={3} 
+                        <InputOTPSlot
+                          index={3}
                           className="border-2 border-[#009689]/30 focus:border-[#009689] h-14 w-12 text-xl font-bold"
                         />
                       </InputOTPGroup>
                       <InputOTPGroup>
-                        <InputOTPSlot 
-                          index={4} 
+                        <InputOTPSlot
+                          index={4}
                           className="border-2 border-[#009689]/30 focus:border-[#009689] h-14 w-12 text-xl font-bold"
                         />
                       </InputOTPGroup>
                       <InputOTPGroup>
-                        <InputOTPSlot 
-                          index={5} 
+                        <InputOTPSlot
+                          index={5}
                           className="border-2 border-[#009689]/30 focus:border-[#009689] h-14 w-12 text-xl font-bold"
                         />
                       </InputOTPGroup>
                     </InputOTP>
                   </div>
                   {error && (
-                    <p className="text-sm text-red-600 text-center mt-2">{error}</p>
+                    <p className="text-sm text-red-600 text-center mt-2">
+                      {error}
+                    </p>
                   )}
                   <div className="text-center mt-4">
                     <div className="flex items-center justify-center gap-2 text-sm">
-                      <span className="text-slate-600">Didn't receive the code?</span>
+                      <span className="text-slate-600">
+                        Didn't receive the code?
+                      </span>
                       <Button
                         onClick={handleSendOtp}
                         type="button"
@@ -211,13 +231,14 @@ export default function Verify() {
               {/* Security Notice */}
               <div className="mt-6 bg-[#ffd8af]/10 border-2 border-[#ffd8af]/30 rounded-lg p-4">
                 <p className="text-xs text-slate-700 text-center">
-                  🔒 <span className="font-bold">Security Notice:</span> Never share your OTP with anyone. 
-                  ZapWallet will never ask for your verification code.
+                  🔒 <span className="font-bold">Security Notice:</span> Never
+                  share your OTP with anyone. ZapWallet will never ask for your
+                  verification code.
                 </p>
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-3 pt-2 pb-6">
-              <Button 
+              <Button
                 onClick={handleSubmit}
                 disabled={otpValue.length < 6}
                 className="w-full bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-6 text-lg shadow-xl"
@@ -251,29 +272,33 @@ export default function Verify() {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-[#009689] flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold text-slate-900">Secure Verification</p>
-                    <p className="text-sm text-slate-600">Your code is encrypted and valid for 2 minutes</p>
+                    <p className="font-bold text-slate-900">
+                      Secure Verification
+                    </p>
+                    <p className="text-sm text-slate-600">
+                      Your code is encrypted and valid for 2 minutes
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-[#009689] flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold text-slate-900">One-Time Use</p>
-                    <p className="text-sm text-slate-600">Each code can only be used once for security</p>
+                    <p className="text-sm text-slate-600">
+                      Each code can only be used once for security
+                    </p>
                   </div>
                 </div>
-                
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-3 pt-2 pb-6">
-              <Button 
-                onClick={handleSendOtp} 
+              <Button
+                onClick={handleSendOtp}
                 className="w-full bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-6 text-lg shadow-xl"
               >
                 <Mail className="w-5 h-5 mr-2" />
                 Send Verification Code
               </Button>
-             
             </CardFooter>
           </Card>
         )}

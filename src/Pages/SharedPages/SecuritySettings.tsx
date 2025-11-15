@@ -155,18 +155,18 @@ const SecuritySettings = () => {
   const isSubmitDisabled = isLoading || isFormEmpty || hasErrors;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-xl bg-[#009689] flex items-center justify-center">
-            <Shield className="w-8 h-8 text-white" />
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-[#009689] flex items-center justify-center mx-auto sm:mx-0">
+            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
           </div>
-          <div>
-            <h1 className="text-4xl font-black text-[#009689]">
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#009689]">
               Security Settings
             </h1>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-sm sm:text-base">
               Manage your account security and PIN
             </p>
           </div>
@@ -174,29 +174,29 @@ const SecuritySettings = () => {
 
         {/* Security Status */}
         <Card className="border-2 border-green-200 bg-gradient-to-r from-green-50 to-white">
-          <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="w-6 h-6 text-white" />
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
+                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
-                <h3 className="font-bold text-lg text-slate-900 mb-2">
+              <div className="text-center sm:text-left">
+                <h3 className="font-bold text-base sm:text-lg text-slate-900 mb-2">
                   Account Secured
                 </h3>
-                <p className="text-sm text-slate-700 mb-3">
+                <p className="text-xs sm:text-sm text-slate-700 mb-3">
                   Your account is protected with a secure PIN. Change it
                   regularly to keep your account safe.
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  <Badge className="bg-green-500 hover:bg-green-600 text-white">
+                <div className="flex flex-wrap justify-center sm:justify-start gap-2">
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     PIN Protected
                   </Badge>
-                  <Badge className="bg-blue-500 hover:bg-blue-600 text-white">
+                  <Badge className="bg-blue-500 hover:bg-blue-600 text-white text-xs">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Email Verified
                   </Badge>
-                  <Badge className="bg-[#009689] hover:bg-[#007a6e] text-white">
+                  <Badge className="bg-[#009689] hover:bg-[#007a6e] text-white text-xs">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Active Account
                   </Badge>
@@ -208,24 +208,24 @@ const SecuritySettings = () => {
 
         {/* Change PIN Form */}
         <Card className="border-2 border-[#009689]/20">
-          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-            <CardTitle className="text-2xl font-black text-[#009689] flex items-center gap-2">
-              <Key className="w-6 h-6" />
+          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
+            <CardTitle className="text-xl sm:text-2xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
+              <Key className="w-5 h-5 sm:w-6 sm:h-6" />
               Change PIN
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
-            <div className="space-y-6">
+          <CardContent className="p-4 sm:p-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Current PIN */}
               <div className="space-y-2">
                 <Label
                   htmlFor="oldPin"
-                  className="text-sm font-bold text-slate-700"
+                  className="text-xs sm:text-sm font-bold text-slate-700"
                 >
                   Current PIN
                 </Label>
                 <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
+                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
                   <Input
                     id="oldPin"
                     name="oldPin"
@@ -233,7 +233,7 @@ const SecuritySettings = () => {
                     placeholder="Enter current PIN"
                     value={formData.oldPin}
                     onChange={handleChange}
-                    className="pl-12 pr-12 border-2 focus:border-[#009689] text-lg font-bold"
+                    className="pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 focus:border-[#009689] text-base sm:text-lg font-bold h-11 sm:h-12"
                     maxLength={6}
                   />
                   <button
@@ -242,15 +242,15 @@ const SecuritySettings = () => {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#009689]"
                   >
                     {showPins.oldPin ? (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </button>
                 </div>
                 {errors.oldPin && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                  <p className="text-xs sm:text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                     {errors.oldPin}
                   </p>
                 )}
@@ -260,12 +260,12 @@ const SecuritySettings = () => {
               <div className="space-y-2">
                 <Label
                   htmlFor="newPin"
-                  className="text-sm font-bold text-slate-700"
+                  className="text-xs sm:text-sm font-bold text-slate-700"
                 >
                   New PIN
                 </Label>
                 <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
+                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
                   <Input
                     id="newPin"
                     name="newPin"
@@ -273,7 +273,7 @@ const SecuritySettings = () => {
                     placeholder="Enter new PIN"
                     value={formData.newPin}
                     onChange={handleChange}
-                    className="pl-12 pr-12 border-2 focus:border-[#009689] text-lg font-bold"
+                    className="pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 focus:border-[#009689] text-base sm:text-lg font-bold h-11 sm:h-12"
                     maxLength={6}
                   />
                   <button
@@ -282,15 +282,15 @@ const SecuritySettings = () => {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#009689]"
                   >
                     {showPins.newPin ? (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </button>
                 </div>
                 {errors.newPin && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                  <p className="text-xs sm:text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                     {errors.newPin}
                   </p>
                 )}
@@ -300,12 +300,12 @@ const SecuritySettings = () => {
               <div className="space-y-2">
                 <Label
                   htmlFor="confirmNewPin"
-                  className="text-sm font-bold text-slate-700"
+                  className="text-xs sm:text-sm font-bold text-slate-700"
                 >
                   Confirm New PIN
                 </Label>
                 <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
+                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
                   <Input
                     id="confirmNewPin"
                     name="confirmNewPin"
@@ -313,7 +313,7 @@ const SecuritySettings = () => {
                     placeholder="Re-enter new PIN"
                     value={formData.confirmNewPin}
                     onChange={handleChange}
-                    className="pl-12 pr-12 border-2 focus:border-[#009689] text-lg font-bold"
+                    className="pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 focus:border-[#009689] text-base sm:text-lg font-bold h-11 sm:h-12"
                     maxLength={6}
                   />
                   <button
@@ -322,57 +322,57 @@ const SecuritySettings = () => {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#009689]"
                   >
                     {showPins.confirmNewPin ? (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                   </button>
                 </div>
                 {errors.confirmNewPin && (
-                  <p className="text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
+                  <p className="text-xs sm:text-sm text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                     {errors.confirmNewPin}
                   </p>
                 )}
               </div>
 
               {/* PIN Requirements */}
-              <div className="bg-[#ffd8af]/10 border-2 border-[#ffd8af]/30 rounded-lg p-4">
-                <p className="text-sm font-bold text-slate-900 mb-2">
+              <div className="bg-[#ffd8af]/10 border-2 border-[#ffd8af]/30 rounded-lg p-3 sm:p-4">
+                <p className="text-xs sm:text-sm font-bold text-slate-900 mb-2">
                   PIN Requirements:
                 </p>
-                <ul className="space-y-1 text-sm text-slate-700">
+                <ul className="space-y-1 text-xs sm:text-sm text-slate-700">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#009689]" />
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                     Minimum 4 digits
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#009689]" />
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                     Only numeric characters (0-9)
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#009689]" />
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                     Different from current PIN
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#009689]" />
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                     Avoid easily guessable PINs (1234, 0000, etc.)
                   </li>
                 </ul>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitDisabled}
-                  className="flex-1 bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-6 text-lg shadow-xl disabled:bg-slate-400 disabled:cursor-not-allowed"
+                  className="flex-1 bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-4 sm:py-6 text-base sm:text-lg shadow-xl disabled:bg-slate-400 disabled:cursor-not-allowed order-2 sm:order-1"
                 >
                   {isLoading ? (
                     "Changing PIN..."
                   ) : (
                     <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
+                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       Change PIN
                     </>
                   )}
@@ -381,7 +381,7 @@ const SecuritySettings = () => {
                   onClick={handleCancel}
                   disabled={isLoading}
                   variant="outline"
-                  className="border-2 border-slate-300 font-bold py-6 px-8 disabled:border-slate-200 disabled:text-slate-400"
+                  className="border-2 border-slate-300 font-bold py-4 sm:py-6 px-4 sm:px-8 disabled:border-slate-200 disabled:text-slate-400 order-1 sm:order-2"
                 >
                   Cancel
                 </Button>
@@ -392,65 +392,65 @@ const SecuritySettings = () => {
 
         {/* Security Tips */}
         <Card className="border-2 border-[#009689]/20">
-          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-            <CardTitle className="text-xl font-black text-[#009689] flex items-center gap-2">
-              <Shield className="w-5 h-5" />
+          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
               Security Tips
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
-            <div className="grid md:grid-cols-2 gap-4">
+          <CardContent className="p-4 sm:p-6">
+            <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-4 h-4 text-[#009689]" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 mb-1">
+                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
                     Change PIN Regularly
                   </p>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Update your PIN every 3-6 months for better security
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-4 h-4 text-[#009689]" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 mb-1">
+                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
                     Never Share Your PIN
                   </p>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-xs sm:text-sm text-slate-600">
                     ZapWallet will never ask for your PIN via email or phone
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-4 h-4 text-[#009689]" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 mb-1">
+                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
                     Use Strong PINs
                   </p>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Avoid sequential or repeated numbers
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-4 h-4 text-[#009689]" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 mb-1">
+                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
                     Enable Notifications
                   </p>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-xs sm:text-sm text-slate-600">
                     Get alerts for all account activities
                   </p>
                 </div>

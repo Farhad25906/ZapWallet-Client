@@ -14,11 +14,13 @@ import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
 import { agentSidebarItems } from "./agentSidebarItems";
+import ErrorPage from "@/Pages/SharedPages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     Component: App,
     path: "/",
+    errorElement: <ErrorPage />,
     children: [
       {
         Component: HomePage,
@@ -45,6 +47,7 @@ export const router = createBrowserRouter([
   {
     Component: DashboardLayout,
     path: "/admin",
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Navigate to="/admin/balance" /> },
       ...generateRoutes(adminSidebarItems),
@@ -53,6 +56,7 @@ export const router = createBrowserRouter([
   {
     Component: DashboardLayout,
     path: "/user",
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Navigate to="/user/profile" /> },
       ...generateRoutes(userSidebarItems),
@@ -61,6 +65,7 @@ export const router = createBrowserRouter([
   {
     Component: DashboardLayout,
     path: "/agent",
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Navigate to="/agent/profile" /> },
       ...generateRoutes(agentSidebarItems),

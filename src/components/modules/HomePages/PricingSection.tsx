@@ -48,8 +48,8 @@ const PricingSection = () => {
       description: "Personal: ৳1,000,000/month | Business: Unlimited"
     },
     {
-      title: "Instant Processing",
-      description: "All transactions processed in real-time"
+      title: "Account Creation Bonus",
+      description: "Create account and get 50 taka bonus."
     }
   ];
 

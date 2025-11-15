@@ -222,18 +222,7 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-[#009689] text-white">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20 text-center">
-          <h2 className="text-4xl font-black mb-6">Ready to Experience ZapWallet?</h2>
-          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-            Join millions of users enjoying seamless digital payments
-          </p>
-          <button className="bg-white text-[#009689] px-10 py-4 rounded-lg font-bold text-lg hover:bg-[#ffd8af] transition-all duration-300 shadow-xl">
-            Get Started Free
-          </button>
-        </div>
-      </section>
+      
     </div>
   );
 };

@@ -20,13 +20,13 @@ import { Phone } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Login form validation schema
+
 const loginSchema = z.object({
-  phone: z.string()
-    .regex(/^\+88\d{11}$/, {
-      message: "Phone must start with +88 and be 13 digits total",
-    }),
-  pin: z.string()
+  phone: z.string().regex(/^\+88\d{11}$/, {
+    message: "Phone must start with +88 and be 13 digits total",
+  }),
+  pin: z
+    .string()
     .min(4, { message: "PIN must be at least 4 digits" })
     .max(6, { message: "PIN cannot exceed 6 digits" })
     .regex(/^\d+$/, { message: "PIN must contain only numbers" }),
@@ -39,7 +39,7 @@ export function LoginForm({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
-  
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -47,9 +47,9 @@ export function LoginForm({
       pin: "",
     },
   });
-  
+
   const [login] = useLoginMutation();
-  
+
   const onSubmit = async (data: LoginFormValues) => {
     console.log(data);
 
@@ -62,6 +62,14 @@ export function LoginForm({
       }
     } catch (error: any) {
       console.error(error.data.message);
+      if (error.data.message === "Password does not match") {
+        toast.error("Invalid credentials");
+      }
+
+      if (error.data.message === "User is not verified") {
+        toast.error("Your account is not verified");
+        navigate("/verify", { state: data.phone });
+      }
       toast.error(`Log in Error: ${error.data.message}`);
     }
   };
@@ -119,8 +127,8 @@ export function LoginForm({
                   <FormControl>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
-                      <Input 
-                        placeholder="+8801234567890" 
+                      <Input
+                        placeholder="+8801234567890"
                         className="pl-12"
                         {...field}
                         onChange={(e) => handlePhoneChange(e, field)}
@@ -139,8 +147,8 @@ export function LoginForm({
                 <FormItem>
                   <FormLabel>PIN</FormLabel>
                   <FormControl>
-                    <Password 
-                      placeholder="Enter 4-6 digit PIN" 
+                    <Password
+                      placeholder="Enter 4-6 digit PIN"
                       {...field}
                       onChange={(error: any) => handlePinChange(error, field)}
                       maxLength={6}
@@ -151,8 +159,8 @@ export function LoginForm({
               )}
             />
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#009689] hover:bg-[#007a6e] text-white font-semibold"
               disabled={form.formState.isSubmitting}
             >

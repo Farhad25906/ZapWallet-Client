@@ -19,7 +19,7 @@ import AllTransactionHistory from "@/Pages/AdminPages/AllTransactionHistory";
 import Revenue from "@/Pages/AdminPages/Revenue";
 import SecuritySettings from "@/Pages/SharedPages/SecuritySettings";
 
-const Balance = lazy(() => import("@/Pages/AdminPages/Balance"));
+const Balance = lazy(() => import("@/Pages/SharedPages/Balance"));
 
 export const adminSidebarItems: ISidebarItem[] = [
   

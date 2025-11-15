@@ -13,6 +13,8 @@ import {
   User,
   Filter,
   X,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import ZapWalletLoader from "@/utils/ZapWalletLoader";
 import {
@@ -61,6 +63,7 @@ const AllTransactionHistory = () => {
   const [filters, setFilters] = useState<FilterState>({});
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [tempFilters, setTempFilters] = useState<FilterState>({});
+  const [expandedTransaction, setExpandedTransaction] = useState<string | null>(null);
 
   const { data, isLoading } = useAllTransactionsQuery({
     page: currentPage,
@@ -132,6 +135,10 @@ const AllTransactionHistory = () => {
     setTempFilters({});
   };
 
+  const toggleTransactionExpand = (transactionId: string) => {
+    setExpandedTransaction(expandedTransaction === transactionId ? null : transactionId);
+  };
+
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
 
   if (isLoading) return <ZapWalletLoader />;
@@ -140,22 +147,22 @@ const AllTransactionHistory = () => {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-3 sm:p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-black text-[#009689]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#009689]">
               Transaction History
             </h1>
-            <p className="text-slate-600 mt-1">
+            <p className="text-slate-600 mt-1 text-sm sm:text-base">
               View and manage all your transactions
             </p>
           </div>
-          <div className="relative">
+          <div className="relative flex justify-center sm:justify-end">
             <Button
               variant="outline"
-              className="border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white font-bold"
+              className="border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white font-bold w-full sm:w-auto"
               onClick={() => {
                 setTempFilters(filters);
                 setIsFilterOpen(true);
@@ -174,12 +181,12 @@ const AllTransactionHistory = () => {
 
         {/* Active Filters Display */}
         {activeFilterCount > 0 && (
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
             <span className="text-sm font-semibold text-slate-600">
               Active Filters:
             </span>
             {filters.type && (
-              <Badge variant="outline" className="gap-2">
+              <Badge variant="outline" className="gap-2 text-xs">
                 Type: {filters.type.replace(/_/g, " ")}
                 <X
                   className="w-3 h-3 cursor-pointer"
@@ -192,7 +199,7 @@ const AllTransactionHistory = () => {
               </Badge>
             )}
             {filters.status && (
-              <Badge variant="outline" className="gap-2">
+              <Badge variant="outline" className="gap-2 text-xs">
                 Status: {filters.status}
                 <X
                   className="w-3 h-3 cursor-pointer"
@@ -205,7 +212,7 @@ const AllTransactionHistory = () => {
               </Badge>
             )}
             {filters.startDate && filters.endDate && (
-              <Badge variant="outline" className="gap-2">
+              <Badge variant="outline" className="gap-2 text-xs">
                 Date: {filters.startDate} to {filters.endDate}
                 <X
                   className="w-3 h-3 cursor-pointer"
@@ -219,7 +226,7 @@ const AllTransactionHistory = () => {
             )}
             {(filters.minAmount !== undefined ||
               filters.maxAmount !== undefined) && (
-              <Badge variant="outline" className="gap-2">
+              <Badge variant="outline" className="gap-2 text-xs">
                 Amount:
                 {filters.minAmount !== undefined &&
                   ` Min: ৳${filters.minAmount}`}
@@ -239,7 +246,7 @@ const AllTransactionHistory = () => {
               variant="ghost"
               size="sm"
               onClick={handleClearFilters}
-              className="text-red-600 hover:text-red-700"
+              className="text-red-600 hover:text-red-700 text-xs"
             >
               Clear All
             </Button>
@@ -249,21 +256,21 @@ const AllTransactionHistory = () => {
         {/* Transactions List */}
         <Card className="border-2 border-[#009689]/20">
           <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-            <CardTitle className="text-2xl font-black text-[#009689] flex items-center gap-2">
-              <Receipt className="w-6 h-6" />
+            <CardTitle className="text-xl sm:text-2xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
+              <Receipt className="w-5 h-5 sm:w-6 sm:h-6" />
               All Transactions
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             {transactions.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Receipt className="w-10 h-10 text-slate-400" />
+              <div className="text-center py-12 sm:py-16">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Receipt className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" />
                 </div>
-                <p className="text-slate-600 font-semibold text-lg">
+                <p className="text-slate-600 font-semibold text-base sm:text-lg">
                   No transactions found
                 </p>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
                   {activeFilterCount > 0
                     ? "Try adjusting your filters"
                     : "Your transaction history will appear here"}
@@ -277,75 +284,105 @@ const AllTransactionHistory = () => {
                     color,
                     bg,
                   } = getTransactionIcon(transaction.type);
+                  const isExpanded = expandedTransaction === transaction._id;
 
                   return (
                     <div
                       key={`${transaction._id}-${currentPage}`}
-                      className="p-6 hover:bg-[#009689]/5 transition-colors cursor-pointer"
+                      className="p-4 sm:p-6 hover:bg-[#009689]/5 transition-colors cursor-pointer"
+                      onClick={() => toggleTransactionExpand(transaction._id)}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                         {/* Left Side - Icon & Details */}
-                        <div className="flex items-center gap-4 flex-1">
+                        <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
                           <div
-                            className={`w-14 h-14 rounded-xl ${bg} flex items-center justify-center flex-shrink-0`}
+                            className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl ${bg} flex items-center justify-center flex-shrink-0`}
                           >
-                            <Icon className={`w-7 h-7 ${color}`} />
+                            <Icon className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ${color}`} />
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-black text-lg text-slate-900">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                              <h3 className="font-black text-base sm:text-lg text-slate-900 truncate">
                                 {transaction.type.replace(/_/g, " ")}
                               </h3>
-                              <Badge
-                                className={`${getTransactionBadgeColor(
-                                  transaction.type
-                                )} text-white font-semibold`}
-                              >
-                                {transaction.initiatedBy}
-                              </Badge>
-                              <Badge
-                                className={`${
-                                  transaction.status === "COMPLETED"
-                                    ? "bg-green-500"
-                                    : transaction.status === "PENDING"
-                                    ? "bg-yellow-500"
-                                    : "bg-red-500"
-                                } text-white`}
-                              >
-                                {transaction.status}
-                              </Badge>
+                              <div className="flex flex-wrap gap-1">
+                                <Badge
+                                  className={`${getTransactionBadgeColor(
+                                    transaction.type
+                                  )} text-white font-semibold text-xs`}
+                                >
+                                  {transaction.initiatedBy}
+                                </Badge>
+                                <Badge
+                                  className={`${
+                                    transaction.status === "COMPLETED"
+                                      ? "bg-green-500"
+                                      : transaction.status === "PENDING"
+                                      ? "bg-yellow-500"
+                                      : "bg-red-500"
+                                  } text-white text-xs`}
+                                >
+                                  {transaction.status}
+                                </Badge>
+                              </div>
                             </div>
 
-                            <div className="flex items-center gap-4 text-sm text-slate-600">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-slate-600">
                               <span className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
+                                <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                                 {formatDate(transaction.createdAt)}
                               </span>
                               <span className="flex items-center gap-1">
-                                <User className="w-4 h-4" />
+                                <User className="w-3 h-3 sm:w-4 sm:h-4" />
                                 ID: {transaction._id.slice(-8)}
                               </span>
                             </div>
 
-                            {/* User Information */}
-                            <div className="flex items-center gap-4 text-xs text-slate-500 mt-1">
-                              {transaction.from && (
-                                <span>From: {transaction.from.name}</span>
-                              )}
-                              {transaction.to && (
-                                <span>
-                                  To: {transaction.to?.name || "System"}
-                                </span>
-                              )}
-                            </div>
+                            {/* Expanded Details */}
+                            {isExpanded && (
+                              <div className="mt-3 space-y-2 border-t border-slate-100 pt-3">
+                                {/* User Information */}
+                                <div className="flex flex-col gap-1 text-xs text-slate-500">
+                                  {transaction.from && (
+                                    <span>From: {transaction.from.name}</span>
+                                  )}
+                                  {transaction.to && (
+                                    <span>
+                                      To: {transaction.to?.name || "System"}
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* Commission Details */}
+                                {(transaction.commission.systemFee > 0 ||
+                                  transaction.commission.agentCommission > 0 ||
+                                  transaction.commission.superAdminCommission > 0) && (
+                                  <div className="flex flex-wrap gap-1">
+                                    {transaction.commission.systemFee > 0 && (
+                                      <Badge variant="outline" className="text-xs">
+                                        System Fee: ৳{transaction.commission.systemFee}
+                                      </Badge>
+                                    )}
+                                    {(transaction.commission.agentCommission > 0 ||
+                                      transaction.commission.superAdminCommission > 0) && (
+                                      <Badge variant="outline" className="text-xs">
+                                        Fees: ৳
+                                        {transaction.commission.agentCommission +
+                                          transaction.commission.superAdminCommission}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
 
-                        {/* Right Side - Amount & Commissions */}
-                        <div className="text-right ml-4">
+                        {/* Right Side - Amount & Expand Button */}
+                        <div className="flex items-center justify-between sm:justify-end gap-2 sm:ml-4">
                           <p
-                            className={`text-2xl font-black ${
+                            className={`text-xl sm:text-2xl font-black ${
                               transaction.type === "CASH_IN" ||
                               transaction.type === "ADD_MONEY"
                                 ? "text-green-600"
@@ -358,33 +395,47 @@ const AllTransactionHistory = () => {
                               : "-"}
                             ৳{transaction.amount.toLocaleString()}
                           </p>
-
-                          {(transaction.commission.systemFee > 0 ||
-                            transaction.commission.agentCommission > 0 ||
-                            transaction.commission.superAdminCommission >
-                              0) && (
-                            <div className="mt-2 space-y-1">
-                              {transaction.commission.systemFee > 0 && (
-                                <Badge variant="outline" className="text-xs">
-                                  System Fee: ৳
-                                  {transaction.commission.systemFee}
-                                </Badge>
-                              )}
-                              {(transaction.commission.agentCommission > 0 ||
-                                transaction.commission.superAdminCommission >
-                                  0) && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs ml-1"
-                                >
-                                  Fees: ৳
-                                  {transaction.commission.agentCommission +
-                                    transaction.commission.superAdminCommission}
-                                </Badge>
-                              )}
-                            </div>
-                          )}
+                          
+                          {/* Mobile Expand Button */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="sm:hidden p-1 h-auto"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleTransactionExpand(transaction._id);
+                            }}
+                          >
+                            {isExpanded ? (
+                              <ChevronUp className="w-4 h-4" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4" />
+                            )}
+                          </Button>
                         </div>
+                      </div>
+
+                      {/* Commission Details - Desktop (always visible) */}
+                      <div className="hidden sm:block mt-2">
+                        {(transaction.commission.systemFee > 0 ||
+                          transaction.commission.agentCommission > 0 ||
+                          transaction.commission.superAdminCommission > 0) && (
+                          <div className="flex flex-wrap gap-1">
+                            {transaction.commission.systemFee > 0 && (
+                              <Badge variant="outline" className="text-xs">
+                                System Fee: ৳{transaction.commission.systemFee}
+                              </Badge>
+                            )}
+                            {(transaction.commission.agentCommission > 0 ||
+                              transaction.commission.superAdminCommission > 0) && (
+                              <Badge variant="outline" className="text-xs">
+                                Fees: ৳
+                                {transaction.commission.agentCommission +
+                                  transaction.commission.superAdminCommission}
+                              </Badge>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -396,10 +447,10 @@ const AllTransactionHistory = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-end mt-4">
-            <div>
+          <div className="flex justify-center sm:justify-end mt-4">
+            <div className="w-full sm:w-auto">
               <Pagination>
-                <PaginationContent>
+                <PaginationContent className="flex-wrap">
                   <PaginationItem>
                     <PaginationPrevious
                       onClick={() =>
@@ -413,7 +464,7 @@ const AllTransactionHistory = () => {
                     />
                   </PaginationItem>
                   {Array.from(
-                    { length: totalPages },
+                    { length: Math.min(totalPages, 5) }, // Show max 5 pages on mobile
                     (_, index) => index + 1
                   ).map((page) => (
                     <PaginationItem
@@ -446,16 +497,16 @@ const AllTransactionHistory = () => {
 
       {/* Filter Dialog */}
       <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] w-[95vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black text-[#009689]">
+            <DialogTitle className="text-xl sm:text-2xl font-black text-[#009689]">
               Filter Transactions
             </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="type" className="font-semibold">
+                <Label htmlFor="type" className="font-semibold text-sm sm:text-base">
                   Transaction Type
                 </Label>
                 <Select
@@ -464,7 +515,7 @@ const AllTransactionHistory = () => {
                     setTempFilters({ ...tempFilters, type: value || undefined })
                   }
                 >
-                  <SelectTrigger id="type">
+                  <SelectTrigger id="type" className="text-sm sm:text-base">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -478,7 +529,7 @@ const AllTransactionHistory = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="status" className="font-semibold">
+                <Label htmlFor="status" className="font-semibold text-sm sm:text-base">
                   Status
                 </Label>
                 <Select
@@ -490,7 +541,7 @@ const AllTransactionHistory = () => {
                     })
                   }
                 >
-                  <SelectTrigger id="status">
+                  <SelectTrigger id="status" className="text-sm sm:text-base">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -502,9 +553,9 @@ const AllTransactionHistory = () => {
               </div>
             </div>
             {/* Date Range Filters */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="startDate" className="font-semibold">
+                <Label htmlFor="startDate" className="font-semibold text-sm sm:text-base">
                   Start Date
                 </Label>
                 <Input
@@ -517,10 +568,11 @@ const AllTransactionHistory = () => {
                       startDate: e.target.value || undefined,
                     })
                   }
+                  className="text-sm sm:text-base"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="endDate" className="font-semibold">
+                <Label htmlFor="endDate" className="font-semibold text-sm sm:text-base">
                   End Date
                 </Label>
                 <Input
@@ -533,14 +585,15 @@ const AllTransactionHistory = () => {
                       endDate: e.target.value || undefined,
                     })
                   }
+                  className="text-sm sm:text-base"
                 />
               </div>
             </div>
 
             {/* Amount Range Filters */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="minAmount" className="font-semibold">
+                <Label htmlFor="minAmount" className="font-semibold text-sm sm:text-base">
                   Min Amount (৳)
                 </Label>
                 <Input
@@ -556,10 +609,11 @@ const AllTransactionHistory = () => {
                         : undefined,
                     })
                   }
+                  className="text-sm sm:text-base"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="maxAmount" className="font-semibold">
+                <Label htmlFor="maxAmount" className="font-semibold text-sm sm:text-base">
                   Max Amount (৳)
                 </Label>
                 <Input
@@ -575,17 +629,18 @@ const AllTransactionHistory = () => {
                         : undefined,
                     })
                   }
+                  className="text-sm sm:text-base"
                 />
               </div>
             </div>
           </div>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={handleClearTempFilters}>
+          <DialogFooter className="gap-2 flex-col sm:flex-row">
+            <Button variant="outline" onClick={handleClearTempFilters} className="w-full sm:w-auto">
               Clear
             </Button>
             <Button
               onClick={handleApplyFilters}
-              className="bg-[#009689] hover:bg-[#007d71] text-white font-bold"
+              className="bg-[#009689] hover:bg-[#007d71] text-white font-bold w-full sm:w-auto"
             >
               Apply Filters
             </Button>

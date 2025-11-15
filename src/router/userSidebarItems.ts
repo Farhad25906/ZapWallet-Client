@@ -1,4 +1,4 @@
-import Balance from "@/Pages/AdminPages/Balance";
+
 import CashOut from "@/Pages/UserPages/CashOut";
 import SecuritySettings from "@/Pages/SharedPages/SecuritySettings";
 import SendMoney from "@/Pages/UserPages/SendMoney";
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import Profile from "@/Pages/SharedPages/Profile";
+import Balance from "@/Pages/SharedPages/Balance";
 
 export const userSidebarItems: ISidebarItem[] = [
   {

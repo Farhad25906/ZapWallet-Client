@@ -52,7 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {/* Navigation Content */}
       <SidebarContent className="px-2 py-4">
-        {data.navMain.map((item, index) => (
+        {data.navMain.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel className="text-[#009689] font-bold text-xs uppercase tracking-wider px-3 py-2">
               {item.title}

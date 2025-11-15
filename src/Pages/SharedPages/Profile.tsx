@@ -38,7 +38,6 @@ import type { TransactionType } from "@/types/transaction.types";
 import { useMyTransactionsQuery } from "@/redux/features/transaction/transaction.api";
 import EditProfileModal from "@/components/modules/ProfilePages/EditProfileModal";
 
-
 // Type guard for IUser
 const isIUser = (data: unknown): data is IUser => {
   return typeof data === 'object' && data !== null && 'name' in data;
@@ -159,19 +158,19 @@ const Profile: React.FC = () => {
   const latestTransactions = transactionData?.transactions?.slice(0, 3) || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 sm:p-6">
+      <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-black text-[#009689]">My Profile</h1>
-            <p className="text-slate-600 mt-1">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#009689]">My Profile</h1>
+            <p className="text-slate-600 mt-1 text-sm sm:text-base">
               Manage your account information
             </p>
           </div>
           <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-[#009689] hover:bg-[#007a6e] text-white font-bold">
+              <Button className="bg-[#009689] hover:bg-[#007a6e] text-white font-bold w-full sm:w-auto">
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Profile
               </Button>
@@ -186,14 +185,14 @@ const Profile: React.FC = () => {
           </Dialog>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Profile Picture & Quick Info */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             {/* Profile Picture Card */}
             <Card className="border-2 border-[#009689]/20">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="relative group">
-                  <div className="w-full aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-[#009689] to-[#00c4b4] flex items-center justify-center">
+                  <div className="w-32 h-32 sm:w-full sm:aspect-square mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-[#009689] to-[#00c4b4] flex items-center justify-center">
                     {userData?.picture ? (
                       <img
                         src={userData.picture}
@@ -201,19 +200,18 @@ const Profile: React.FC = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="text-white text-6xl font-black">
+                      <div className="text-white text-3xl sm:text-6xl font-black">
                         {userData?.name?.charAt(0).toUpperCase()}
                       </div>
                     )}
                   </div>
-                  
                 </div>
 
-                <div className="mt-6 text-center">
-                  <h2 className="text-2xl font-black text-slate-900">
+                <div className="mt-4 sm:mt-6 text-center">
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 line-clamp-2">
                     {userData?.name || "Unknown User"}
                   </h2>
-                  <Badge className="mt-2 bg-[#009689] hover:bg-[#007a6e] text-white font-bold capitalize">
+                  <Badge className="mt-2 bg-[#009689] hover:bg-[#007a6e] text-white font-bold capitalize text-xs sm:text-sm">
                     {userData?.role?.toLowerCase() || "user"}
                   </Badge>
                 </div>
@@ -221,11 +219,11 @@ const Profile: React.FC = () => {
                 <Separator className="my-4" />
 
                 {/* Wallet Balance Section */}
-                <div className="bg-gradient-to-br from-[#ffd8af]/20 to-[#009689]/10 rounded-xl p-4 mb-4">
+                <div className="bg-gradient-to-br from-[#ffd8af]/20 to-[#009689]/10 rounded-xl p-3 sm:p-4 mb-4">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <Wallet className="w-5 h-5 text-[#009689]" />
-                      <span className="text-sm font-bold text-slate-700">
+                      <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
+                      <span className="text-xs sm:text-sm font-bold text-slate-700">
                         Wallet Balance
                       </span>
                     </div>
@@ -233,33 +231,33 @@ const Profile: React.FC = () => {
                       variant="ghost"
                       size="icon"
                       onClick={toggleBalance}
-                      className="h-8 w-8"
+                      className="h-6 w-6 sm:h-8 sm:w-8"
                     >
                       {showBalance ? (
-                        <EyeOff className="w-4 h-4 text-[#009689]" />
+                        <EyeOff className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                       ) : (
-                        <Eye className="w-4 h-4 text-[#009689]" />
+                        <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                       )}
                     </Button>
                   </div>
                   <div className="text-center">
                     {showBalance ? (
                       <div className="space-y-1">
-                        <p className="text-3xl font-black text-[#009689]">
-                          ৳{wallet?.balance || 0}
+                        <p className="text-2xl sm:text-3xl font-black text-[#009689]">
+                          ৳{wallet?.balance?.toLocaleString() || 0}
                         </p>
                         <p className="text-xs text-slate-600 font-semibold">
                           {wallet?.currency || "BDT"}
                         </p>
                       </div>
                     ) : (
-                      <p className="text-3xl font-black text-slate-400">
+                      <p className="text-2xl sm:text-3xl font-black text-slate-400">
                         ••••••
                       </p>
                     )}
                   </div>
                   <Badge
-                    className={`mt-3 w-full justify-center ${
+                    className={`mt-3 w-full justify-center text-xs ${
                       wallet?.walletStatus === WalletStatusValues.ACTIVE
                         ? "bg-green-500 hover:bg-green-600"
                         : "bg-red-500 hover:bg-red-600"
@@ -272,10 +270,10 @@ const Profile: React.FC = () => {
                 <Separator className="my-4" />
 
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
                     <span className="text-slate-600 font-semibold">Status</span>
                     <Badge
-                      className={`${
+                      className={`text-xs ${
                         userData?.isActive === IsActiveValues.ACTIVE
                           ? "bg-green-500 hover:bg-green-600"
                           : "bg-red-500 hover:bg-red-600"
@@ -285,33 +283,33 @@ const Profile: React.FC = () => {
                     </Badge>
                   </div>
 
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
                     <span className="text-slate-600 font-semibold">
                       Verified
                     </span>
                     {userData?.isVerified ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-red-500" />
+                      <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
                     )}
                   </div>
                   
                   {userData?.agentInfo && (
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
                       <span className="text-slate-600 font-semibold">
                         Total Commission
                       </span>
-                      <p className="text-base font-bold text-[#009689]">
+                      <p className="text-sm sm:text-base font-bold text-[#009689]">
                         ৳{userData.agentInfo.totalCommission || 0}
                       </p>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
                     <span className="text-slate-600 font-semibold">
                       Total Transactions
                     </span>
-                    <Badge className="bg-[#ffd8af] text-[#009689] hover:bg-[#ffd8af] font-bold">
+                    <Badge className="bg-[#ffd8af] text-[#009689] hover:bg-[#ffd8af] font-bold text-xs">
                       {transactionData?.total || 0}
                     </Badge>
                   </div>
@@ -321,83 +319,83 @@ const Profile: React.FC = () => {
           </div>
 
           {/* Right Column - Profile Information */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Personal Information */}
             <Card className="border-2 border-[#009689]/20">
-              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-                <CardTitle className="text-xl font-black text-[#009689] flex items-center gap-2">
-                  <User className="w-5 h-5" />
+              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2">
+                  <User className="w-4 h-4 sm:w-5 sm:h-5" />
                   Personal Information
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid md:grid-cols-2 gap-6">
+              <CardContent className="p-4 sm:p-6">
+                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       Full Name
                     </span>
-                    <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
-                      <User className="w-4 h-4 text-[#009689]" />
+                    <div className="flex items-center gap-2 text-sm sm:text-base font-semibold text-slate-900">
+                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                       {userData?.name || "Not provided"}
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       Email Address
                     </span>
-                    <div className="flex items-center gap-2 text-base font-medium text-slate-900">
-                      <Mail className="w-4 h-4 text-[#009689]" />
+                    <div className="flex items-center gap-2 text-sm sm:text-base font-medium text-slate-900">
+                      <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                       {userData?.email || "Not provided"}
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       Phone Number
                     </span>
-                    <div className="flex items-center gap-2 text-base font-medium text-slate-900">
-                      <Phone className="w-4 h-4 text-[#009689]" />
+                    <div className="flex items-center gap-2 text-sm sm:text-base font-medium text-slate-900">
+                      <Phone className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                       {userData?.phone || "Not provided"}
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       National ID (NID)
                     </span>
-                    <div className="flex items-center gap-2 text-base font-bold text-slate-900">
-                      <CreditCard className="w-4 h-4 text-[#009689]" />
+                    <div className="flex items-center gap-2 text-sm sm:text-base font-bold text-slate-900">
+                      <CreditCard className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
                       {userData?.nid || "Not provided"}
                     </div>
                   </div>
 
                   <div className="space-y-2 md:col-span-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       Address
                     </span>
-                    <div className="flex items-start gap-2 text-base font-medium text-slate-900">
-                      <MapPin className="w-4 h-4 text-[#009689] mt-1" />
-                      {userData?.address || "Not provided"}
+                    <div className="flex items-start gap-2 text-sm sm:text-base font-medium text-slate-900">
+                      <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689] mt-1 flex-shrink-0" />
+                      <span className="break-words">{userData?.address || "Not provided"}</span>
                     </div>
                   </div>
 
                   {userData?.agentInfo && (
                     <>
                       <div className="space-y-2">
-                        <span className="text-sm font-bold text-slate-600">
+                        <span className="text-xs sm:text-sm font-bold text-slate-600">
                           TIN ID
                         </span>
-                        <p className="text-base font-bold text-slate-900">
+                        <p className="text-sm sm:text-base font-bold text-slate-900">
                           {userData.agentInfo.tinId || "Not provided"}
                         </p>
                       </div>
                       <div className="space-y-2">
-                        <span className="text-sm font-bold text-slate-600">
+                        <span className="text-xs sm:text-sm font-bold text-slate-600">
                           Approval Status
                         </span>
                         <Badge
-                          className={`${
+                          className={`text-xs ${
                             userData.agentInfo.approvalStatus === "pending"
                               ? "bg-yellow-500"
                               : userData.agentInfo.approvalStatus === "approved"
@@ -412,10 +410,10 @@ const Profile: React.FC = () => {
                   )}
 
                   <div className="space-y-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       Account Created
                     </span>
-                    <p className="text-base font-semibold text-slate-900">
+                    <p className="text-sm sm:text-base font-semibold text-slate-900">
                       {userData?.createdAt
                         ? new Date(userData.createdAt).toLocaleDateString(
                             "en-US",
@@ -430,10 +428,10 @@ const Profile: React.FC = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <span className="text-sm font-bold text-slate-600">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600">
                       Last Updated
                     </span>
-                    <p className="text-base font-semibold text-slate-900">
+                    <p className="text-sm sm:text-base font-semibold text-slate-900">
                       {userData?.updatedAt
                         ? new Date(userData.updatedAt).toLocaleDateString(
                             "en-US",
@@ -452,13 +450,13 @@ const Profile: React.FC = () => {
 
             {/* Latest Transactions */}
             <Card className="border-2 border-[#009689]/20">
-              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5">
-                <CardTitle className="text-xl font-black text-[#009689] flex items-center gap-2">
-                  <Receipt className="w-5 h-5" />
+              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2">
+                  <Receipt className="w-4 h-4 sm:w-5 sm:h-5" />
                   Latest Transactions
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-2">
+              <CardContent className="p-2 sm:p-4">
                 {latestTransactions.length > 0 ? (
                   <div className="">
                     {latestTransactions.map((transaction) => {
@@ -471,53 +469,56 @@ const Profile: React.FC = () => {
                       return (
                         <div
                           key={transaction._id}
-                          className="flex items-center justify-between px-4 py-1 bg-slate-50 rounded-lg hover:bg-[#009689]/5 transition-colors"
+                          className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:px-4 sm:py-3 bg-slate-50 rounded-lg hover:bg-[#009689]/5 transition-colors"
                         >
                           {/* Left Side - Icon & Details */}
-                          <div className="flex items-center gap-4 flex-1">
+                          <div className="flex items-start sm:items-center gap-3 flex-1 mb-3 sm:mb-0">
                             <div
-                              className={`w-12 h-12 rounded-xl ${bg} flex items-center justify-center flex-shrink-0`}
+                              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${bg} flex items-center justify-center flex-shrink-0`}
                             >
-                              <Icon className={`w-6 h-6 ${color}`} />
+                              <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${color}`} />
                             </div>
 
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-black text-slate-900">
+                              <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-1">
+                                <h3 className="font-black text-slate-900 text-sm sm:text-base">
                                   {transaction.type.replace(/_/g, " ")}
                                 </h3>
-                                <Badge
-                                  className={`${getTransactionBadgeColor(
-                                    transaction.type
-                                  )} text-white font-semibold text-xs`}
-                                >
-                                  {transaction.initiatedBy}
-                                </Badge>
-                                <Badge 
-                                  className={`${
-                                    transaction.status === "COMPLETED" 
-                                      ? "bg-green-500" 
-                                      : transaction.status === "PENDING"
-                                      ? "bg-yellow-500"
-                                      : "bg-red-500"
-                                  } text-white text-xs`}
-                                >
-                                  {transaction.status}
-                                </Badge>
+                                <div className="flex flex-wrap gap-1">
+                                  <Badge
+                                    className={`${getTransactionBadgeColor(
+                                      transaction.type
+                                    )} text-white font-semibold text-xs`}
+                                  >
+                                    {transaction.initiatedBy}
+                                  </Badge>
+                                  <Badge 
+                                    className={`text-xs ${
+                                      transaction.status === "COMPLETED" 
+                                        ? "bg-green-500" 
+                                        : transaction.status === "PENDING"
+                                        ? "bg-yellow-500"
+                                        : "bg-red-500"
+                                    } text-white`}
+                                  >
+                                    {transaction.status}
+                                  </Badge>
+                                </div>
                               </div>
 
-                              <div className="flex items-center gap-3 text-sm text-slate-600">
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-slate-600">
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
                                   {formatDate(transaction.createdAt)}
                                 </span>
+                                <span className="hidden sm:block">•</span>
                                 <span className="text-xs">
                                   ID: {transaction._id.slice(-8)}
                                 </span>
                               </div>
 
                               {/* User Information */}
-                              <div className="flex items-center gap-4 text-xs text-slate-500 mt-1">
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs text-slate-500 mt-1">
                                 {transaction.from && (
                                   <span>From: {transaction.from.name}</span>
                                 )}
@@ -529,9 +530,9 @@ const Profile: React.FC = () => {
                           </div>
 
                           {/* Right Side - Amount */}
-                          <div className="text-right ml-4">
+                          <div className="text-left sm:text-right">
                             <p
-                              className={`text-xl font-black ${
+                              className={`text-lg sm:text-xl font-black ${
                                 transaction.type === "CASH_IN" || transaction.type === "ADD_MONEY"
                                   ? "text-green-600"
                                   : "text-red-600"
@@ -545,7 +546,7 @@ const Profile: React.FC = () => {
                             {(transaction.commission.systemFee > 0 ||
                               transaction.commission.agentCommission > 0 ||
                               transaction.commission.superAdminCommission > 0) && (
-                              <div className="mt-2 space-y-1">
+                              <div className="mt-2 space-y-1 flex flex-wrap gap-1">
                                 {transaction.commission.systemFee > 0 && (
                                   <Badge variant="outline" className="text-xs">
                                     System Fee: ৳{transaction.commission.systemFee}
@@ -553,7 +554,7 @@ const Profile: React.FC = () => {
                                 )}
                                 {(transaction.commission.agentCommission > 0 ||
                                   transaction.commission.superAdminCommission > 0) && (
-                                  <Badge variant="outline" className="text-xs ml-1">
+                                  <Badge variant="outline" className="text-xs">
                                     Fees: ৳
                                     {transaction.commission.agentCommission +
                                       transaction.commission.superAdminCommission}
@@ -567,14 +568,14 @@ const Profile: React.FC = () => {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Receipt className="w-8 h-8 text-slate-400" />
+                  <div className="text-center py-8 sm:py-12">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                      <Receipt className="w-6 h-6 sm:w-8 sm:h-8 text-slate-400" />
                     </div>
-                    <p className="text-slate-600 font-semibold">
+                    <p className="text-slate-600 font-semibold text-sm sm:text-base">
                       No transactions yet
                     </p>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
                       Your transaction history will appear here
                     </p>
                   </div>
