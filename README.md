@@ -12,8 +12,6 @@ This platform enables users to manage their digital wallet, track transactions, 
 
 ## 🎯 Overview
 
-This project consists of two main parts:
-
 - **Frontend** : Modern React.js application with TypeScript, Tailwind CSS, and Redux for state management
 
 ## 🚀 Features
