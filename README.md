@@ -1,73 +1,87 @@
-# React + TypeScript + Vite
+# 💰 ZapWallet - Digital Wallet Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Full-Stack Digital Wallet Management System built with React, TypeScript, Express.js, and MongoDB.
+This platform enables users to manage their digital wallet, track transactions, and view financial summaries — all through a secure, modern interface and robust backend API.
 
-Currently, two official plugins are available:
+## 🌐 Live URLs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend:** [ZapWallet Frontend](https://zapwallet-client.vercel.app)
+- **Backend:** [ZapWallet Backend](https://zapwallet-server.vercel.app)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🎯 Overview
 
-## Expanding the ESLint configuration
+This project consists of two main parts:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend** : Modern React.js application with TypeScript, Tailwind CSS, and Redux for state management
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 💳 Wallet Management
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **Balance Tracking** — Real-time wallet balance monitoring.
+- **Account Management** — Filter books by genre, availability, and search terms.
+- **Multi-Currency Support** — Handle multiple currencies and exchange rates.
+- **Security Features** — PIN protection and transaction limits.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🔄 Transaction System
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Send & Receive Money** — Seamless peer-to-peer transactions.
+- **Transaction History** — Complete audit trail of all financial activities.
+- **Real-time Updates** — Instant balance and transaction updates.
+- **Transaction Categorization** — Organize transactions by type (transfer, payment, etc.).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 💸 Payment Processing
+
+- **Bill Payments** — Pay utilities, subscriptions, and various services.
+- **QR Code Payments** — Scan-to-pay functionality.
+- **Scheduled Payments** — Set up recurring transactions.
+- **Payment Requests** — Request money from other users.
+
+### 📊 Financial Insights
+
+- **Spending Analytics** — Visualize expenses with charts and graphs.
+- **Budget Management** — Set and track spending limits.
+- **Financial Reports** — Generate monthly/annual financial statements.
+- **Savings Goals** — Track progress toward financial targets.
+
+### 🎨 User Experience
+
+- **Responsive Design** — Works perfectly on desktop, tablet, and mobile.
+- **Modern UI/UX** — Clean, intuitive interface built with Tailwind CSS.
+- **Real-time Notifications** — Instant alerts for transactions and security events.
+- **Form Validation** — Robust form handling with React Hook Form and Zod.
+- **Dark/Light Mode** — Personalized theme preferences.
+
+
+## 🛠️ Tech Stack
+
+### 🖥️ Frontend
+
+| Technology          | Purpose                                 |
+| ------------------- | --------------------------------------- |
+| **React.js 19**     | Frontend framework with latest features |
+| **TypeScript**      | Type-safe development                   |
+| **Tailwind CSS 4**  | Modern utility-first CSS framework      |
+| **Redux Toolkit**   | State management                        |
+| **React Hook Form** | Form handling and validation            |
+| **Zod**             | Schema validation                       |
+| **React Router**    | Client-side routing                     |
+| **Vite**            | Fast build tool and development server  |
+| **Radix UI**        | Accessible UI components                |
+
+---
+
+### ⚙️ Backend
+
+| Technology              | Purpose                        |
+| ----------------------- | ------------------------------ |
+| **Node.js**             | JavaScript runtime environment |
+| **Express.js**          | Web application framework      |
+| **TypeScript**          | Type-safe backend development  |
+| **MongoDB**             | NoSQL database                 |
+| **Mongoose**            | MongoDB object modeling        |
+| **MongoDB Aggregation** | Advanced data processing       |
+| **CORS**                | Cross-origin resource sharing  |
+| **dotenv**              | Environment configuration      |

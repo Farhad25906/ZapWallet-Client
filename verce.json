@@ -1,9 +1,20 @@
 {
   "rewrites": [
     {
+      "source": "/admin/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/user/(.*)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/agent/(.*)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
 }
-
