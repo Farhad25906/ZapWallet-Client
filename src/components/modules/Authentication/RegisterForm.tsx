@@ -31,10 +31,10 @@ const registerSchema = z
       message: "Phone must start with +88 and be 13 digits total",
     }),
     nid: z.string().length(13, { message: "NID must be exactly 13 digits" }),
-    pin: z.string().min(4, { message: "PIN must be at least 4 digits" }),
+    pin: z.string().length(6, { message: "PIN must be exactly 6 digits" }),
     confirmPin: z
       .string()
-      .min(4, { message: "Confirm PIN must be at least 4 digits" }),
+      .length(6, { message: "Confirm PIN must be exactly 6 digits" }),
   })
   .refine((data) => data.pin === data.confirmPin, {
     message: "PINs do not match",
@@ -60,8 +60,8 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
   type FormValues = (typeof schema extends typeof agentSchema
     ? AgentFormValues
     : RegisterFormValues) & {
-    tinId?: string;
-  };
+      tinId?: string;
+    };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -93,14 +93,14 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
 
     try {
       const res = await register(userInfo).unwrap();
-      console.log(res.data.email,"From Register");
+      console.log(res.data.email, "From Register");
       if (res.success === true) {
         toast.success(
           `${role === "agent" ? "Agent" : "User"} registered successfully`
         );
         navigate("/verify", { state: res.data.phone });
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error);
       toast.error(`Registration failed ${error.data.message}`);
     }
@@ -116,9 +116,9 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
       field.onChange("+88");
       return;
     }
-    
+
     if (value.length > 14) return;
-    
+
     field.onChange(value);
   };
 
@@ -196,8 +196,8 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
                 <FormControl>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#009689]" />
-                    <Input 
-                      placeholder="+8801234567890" 
+                    <Input
+                      placeholder="+8801234567890"
                       className="pl-12"
                       {...field}
                       onChange={(e) => handlePhoneChange(e, field)}
@@ -254,7 +254,7 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
               <FormItem>
                 <FormLabel>PIN</FormLabel>
                 <FormControl>
-                  <Password placeholder="Enter 4+ digit PIN" {...field} />
+                  <Password placeholder="Enter 6-digit PIN" {...field} maxLength={6} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -268,7 +268,7 @@ export function RegisterForm({ role, className, ...props }: RegisterFormProps) {
               <FormItem>
                 <FormLabel>Confirm PIN</FormLabel>
                 <FormControl>
-                  <Password placeholder="Re-enter your PIN" {...field} />
+                  <Password placeholder="Re-enter your 6-digit PIN" {...field} maxLength={6} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

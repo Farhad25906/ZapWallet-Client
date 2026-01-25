@@ -16,9 +16,11 @@ import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
-import { Phone } from "lucide-react";
+import { Phone, User, Briefcase, Shield } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DEMO_USERS, type DemoUserType } from "@/constants/demoUsers";
+import { motion } from "framer-motion";
 
 
 const loginSchema = z.object({
@@ -27,8 +29,7 @@ const loginSchema = z.object({
   }),
   pin: z
     .string()
-    .min(4, { message: "PIN must be at least 4 digits" })
-    .max(6, { message: "PIN cannot exceed 6 digits" })
+    .length(6, { message: "PIN must be exactly 6 digits" })
     .regex(/^\d+$/, { message: "PIN must contain only numbers" }),
 });
 
@@ -62,15 +63,17 @@ export function LoginForm({
       }
     } catch (error: any) {
       console.error(error.data.message);
-      if (error.data.message === "Password does not match") {
-        toast.error("Invalid credentials");
-      }
 
-      if (error.data.message === "User is not verified") {
-        toast.error("Your account is not verified");
+      // Handle specific error cases with user-friendly messages
+      if (error.data.message === "Password does not match") {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (error.data.message === "User is not verified") {
+        toast.error("Your account is not verified. Redirecting to verification...");
         navigate("/verify", { state: data.phone });
+      } else {
+        // Generic error message for other cases
+        toast.error(error.data.message || "Login failed. Please try again.");
       }
-      toast.error(`Log in Error: ${error.data.message}`);
     }
   };
 
@@ -102,9 +105,17 @@ export function LoginForm({
   ): void => {
     const value: string = e.target.value;
 
+    // Only allow exactly 6 digits
     if (/^\d*$/.test(value) && value.length <= 6) {
       field.onChange(value);
     }
+  };
+
+  const handleDemoLogin = (userType: DemoUserType) => {
+    const demoUser = DEMO_USERS[userType];
+    form.setValue("phone", demoUser.phone);
+    form.setValue("pin", demoUser.pin);
+    toast.info(`Demo ${userType} credentials loaded. Click Login to continue.`);
   };
 
   return (
@@ -148,7 +159,7 @@ export function LoginForm({
                   <FormLabel>PIN</FormLabel>
                   <FormControl>
                     <Password
-                      placeholder="Enter 4-6 digit PIN"
+                      placeholder="Enter 6-digit PIN"
                       {...field}
                       onChange={(error: any) => handlePinChange(error, field)}
                       maxLength={6}
@@ -168,13 +179,85 @@ export function LoginForm({
             </Button>
           </form>
         </Form>
+
+        {/* Demo Login Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="space-y-3"
+        >
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Quick Demo Login
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full border-[#009689]/30 hover:bg-[#009689]/10 hover:border-[#009689] transition-all"
+                onClick={() => handleDemoLogin("user")}
+              >
+                <User className="w-4 h-4 mr-1" />
+                User
+              </Button>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full border-[#009689]/30 hover:bg-[#009689]/10 hover:border-[#009689] transition-all"
+                onClick={() => handleDemoLogin("agent")}
+              >
+                <Briefcase className="w-4 h-4 mr-1" />
+                Agent
+              </Button>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full border-[#009689]/30 hover:bg-[#009689]/10 hover:border-[#009689] transition-all"
+                onClick={() => handleDemoLogin("admin")}
+              >
+                <Shield className="w-4 h-4 mr-1" />
+                Admin
+              </Button>
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
-      <div className="text-center text-sm">
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="text-center text-sm"
+      >
         Don&apos;t have an account?{" "}
         <Link to="/register" replace className="underline underline-offset-4">
           Register
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }
