@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-// import ChatAssistant from "../components/modules/AI/ChatAssistant";
+import ChatAssistant from "../components/modules/AI/ChatAssistant";
 
 interface IProps {
     children: ReactNode
@@ -12,7 +12,7 @@ const CommonLayout = ({ children }: IProps) => {
             <Navbar />
             {children}
             <Footer />
-            {/* <ChatAssistant /> */}
+            <ChatAssistant />
         </div>
     );
 };

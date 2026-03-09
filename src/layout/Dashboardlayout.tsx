@@ -10,7 +10,7 @@ import {
 import { useMyInfoQuery } from "@/redux/features/user/user.api";
 import ZapWalletLoader from "@/utils/ZapWalletLoader";
 import { Outlet } from "react-router";
-// import ChatAssistant from "../components/modules/AI/ChatAssistant";
+import ChatAssistant from "../components/modules/AI/ChatAssistant";
 
 export default function DashboardLayout() {
   const { data, isLoading } = useMyInfoQuery(undefined);
@@ -33,7 +33,7 @@ export default function DashboardLayout() {
           <Outlet />
         </div>
       </SidebarInset>
-      {/* <ChatAssistant /> */}
+      <ChatAssistant />
     </SidebarProvider>
   );
 }
