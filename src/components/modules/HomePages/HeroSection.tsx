@@ -18,6 +18,7 @@ import {
 } from "@/components/kibo-ui/credit-card";
 import Logo from "@/assets/icons/Logo";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const HeroSection = () => {
   return (
@@ -79,20 +80,25 @@ const HeroSection = () => {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto pt-2 md:pt-4 px-4 sm:px-0"
             >
-              <Button
-                size="lg"
-                className="bg-[#009689] hover:bg-[#007a6e] text-white px-6 py-3 md:px-4 md:py-2 text-base md:text-lg font-bold shadow-xl shadow-[#009689]/30 hover:shadow-2xl hover:shadow-[#009689]/40 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
-              >
-                Get Started Free
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="px-6 py-3 md:px-4 md:py-2 text-base md:text-lg font-bold border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
-              >
-                Learn More
-                <ArrowRight className="ml-2 size-4 md:size-5" />
-              </Button>
+              <Link to="/register">
+                <Button
+                  size="lg"
+                  className="bg-[#009689] hover:bg-[#007a6e] text-white px-6 py-3 md:px-4 md:py-2 text-base md:text-lg font-bold shadow-xl shadow-[#009689]/30 hover:shadow-2xl hover:shadow-[#009689]/40 transition-all duration-300 hover:scale-105 w-full sm:w-auto"
+                >
+                  Get Started Free
+                </Button>
+              </Link>
+
+              <Link to="/about">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="px-6 py-3 md:px-4 md:py-2 text-base md:text-lg font-bold border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
+                >
+                  Learn More
+                  <ArrowRight className="ml-2 size-4 md:size-5" />
+                </Button>
+              </Link>
             </motion.div>
 
           </motion.div>
