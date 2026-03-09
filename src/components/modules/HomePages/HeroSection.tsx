@@ -1,3 +1,4 @@
+import ThreeHeroBackground from "./ThreeHeroBackground";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,8 @@ import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
-    <section className="py-8 md:py-12 lg:py-16 flex items-center overflow-hidden">
+    <section className="relative py-12 md:py-20 lg:py-28 flex items-center overflow-hidden min-h-[85vh]">
+      <ThreeHeroBackground />
       <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8">
         <div className="grid items-center gap-12 md:gap-16 lg:gap-24 lg:grid-cols-2">
           {/* Text Content */}
@@ -46,15 +48,15 @@ const HeroSection = () => {
 
             <div className="space-y-3 md:space-y-4">
               <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-black tracking-tight"
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1]"
               >
-                <span className="text-[#009689] block">
+                <span className="text-[#009689] block drop-shadow-sm">
                   Experience
                 </span>
-                <span className="text-[#ffd8af] block mt-1 md:mt-2">
+                <span className="text-slate-900 block mt-1 md:mt-2">
                   ZapWallet
                 </span>
               </motion.h1>

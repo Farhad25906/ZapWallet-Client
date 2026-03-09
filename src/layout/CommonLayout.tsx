@@ -1,16 +1,18 @@
 import type { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+// import ChatAssistant from "../components/modules/AI/ChatAssistant";
 
 interface IProps {
-    children : ReactNode
+    children: ReactNode
 }
-const CommonLayout = ({children}: IProps) => {
+const CommonLayout = ({ children }: IProps) => {
     return (
-        <div>
-            <Navbar/>
+        <div className="relative min-h-screen">
+            <Navbar />
             {children}
-            <Footer/>
+            <Footer />
+            {/* <ChatAssistant /> */}
         </div>
     );
 };

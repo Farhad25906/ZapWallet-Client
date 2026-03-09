@@ -4,7 +4,7 @@ A modern, responsive React application for ZapWallet digital payment system. Bui
 
 ## 🌐 Live URL
 
-- **Frontend:** [https://zapwallet-client.vercel.app](https://zapwallet-client.vercel.app)
+- **Frontend:** [https://zap-wallet-client.vercel.app](https://zapwallet-client.vercel.app)
 - **Backend API:** [https://zapwallet-server.vercel.app](https://zapwallet-server.vercel.app)
 
 ---

@@ -10,12 +10,13 @@ import {
 import { useMyInfoQuery } from "@/redux/features/user/user.api";
 import ZapWalletLoader from "@/utils/ZapWalletLoader";
 import { Outlet } from "react-router";
+// import ChatAssistant from "../components/modules/AI/ChatAssistant";
 
 export default function DashboardLayout() {
-      const { data, isLoading } = useMyInfoQuery(undefined);
-      if (!isLoading && !data?.data?.email) {
-      return <ZapWalletLoader/>;
-    }
+  const { data, isLoading } = useMyInfoQuery(undefined);
+  if (!isLoading && !data?.data?.email) {
+    return <ZapWalletLoader />;
+  }
 
   return (
     <SidebarProvider>
@@ -32,6 +33,7 @@ export default function DashboardLayout() {
           <Outlet />
         </div>
       </SidebarInset>
+      {/* <ChatAssistant /> */}
     </SidebarProvider>
   );
 }
