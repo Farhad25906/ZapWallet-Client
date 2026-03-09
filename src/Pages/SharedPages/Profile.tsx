@@ -1,4 +1,3 @@
-// Profile.tsx
 import React, { useState, useEffect } from "react";
 import {
   useMyDataUpdateMutation,
@@ -37,6 +36,8 @@ import { WalletStatusValues, type WalletResponse } from "@/types/wallet.types";
 import type { TransactionType } from "@/types/transaction.types";
 import { useMyTransactionsQuery } from "@/redux/features/transaction/transaction.api";
 import EditProfileModal from "@/components/modules/ProfilePages/EditProfileModal";
+import { motion, AnimatePresence } from "framer-motion";
+import SectionHeader from "@/components/modules/HomePages/SectionHeader";
 
 // Type guard for IUser
 const isIUser = (data: unknown): data is IUser => {
@@ -97,11 +98,11 @@ const formatDate = (dateString: string): string => {
 const Profile: React.FC = () => {
   const { data, isLoading } = useMyInfoQuery(undefined);
   const { data: walletData } = useMyWalletQuery(undefined);
-  const { data: transactionData } = useMyTransactionsQuery({ 
-    page: 1, 
-    limit: 3 
+  const { data: transactionData } = useMyTransactionsQuery({
+    page: 1,
+    limit: 3
   });
-  
+
   const [updateProfile, { isLoading: isUpdating }] = useMyDataUpdateMutation();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -112,7 +113,7 @@ const Profile: React.FC = () => {
     picture: "",
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data?.data && isIUser(data.data)) {
       const userData = data.data;
       setFormData({
@@ -151,315 +152,268 @@ const Profile: React.FC = () => {
   if (isLoading) return <ZapWalletLoader />;
 
   const userData = data?.data && isIUser(data.data) ? data.data : undefined;
-  const wallet = (walletData && isWalletResponse(walletData)) 
-    ? walletData.data?.data 
+  const wallet = (walletData && isWalletResponse(walletData))
+    ? walletData.data?.data
     : undefined;
 
   const latestTransactions = transactionData?.transactions?.slice(0, 3) || [];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 sm:p-6">
-      <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
+    <div className="min-h-screen bg-transparent p-4 sm:p-6 overflow-hidden">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-6xl mx-auto space-y-8"
+      >
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#009689]">My Profile</h1>
-            <p className="text-slate-600 mt-1 text-sm sm:text-base">
-              Manage your account information
-            </p>
-          </div>
-          <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-[#009689] hover:bg-[#007a6e] text-white font-bold w-full sm:w-auto">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Profile
-              </Button>
-            </DialogTrigger>
-            <EditProfileModal
-              formData={formData}
-              setFormData={setFormData}
-              isUpdating={isUpdating}
-              onSubmit={handleSubmit}
-              onCancel={() => setIsEditModalOpen(false)}
-            />
-          </Dialog>
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <SectionHeader
+            badge="My Account"
+            title="Personal Profile"
+            subtitle="Manage your personal information, security preferences, and view your latest activities."
+            center={false}
+          />
+          <motion.div variants={itemVariants} className="mb-20">
+            <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-[#009689] hover:bg-[#007a6e] text-white font-black px-8 py-7 rounded-2xl shadow-xl transition-all hover:scale-105">
+                  <Edit className="w-5 h-5 mr-3" />
+                  Edit Profile
+                </Button>
+              </DialogTrigger>
+              <EditProfileModal
+                formData={formData}
+                setFormData={setFormData}
+                isUpdating={isUpdating}
+                onSubmit={handleSubmit}
+                onCancel={() => setIsEditModalOpen(false)}
+              />
+            </Dialog>
+          </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Profile Picture & Quick Info */}
-          <div className="lg:col-span-1 space-y-4 sm:space-y-6">
+          <motion.div variants={itemVariants} className="lg:col-span-1 space-y-8">
             {/* Profile Picture Card */}
-            <Card className="border-2 border-[#009689]/20">
-              <CardContent className="p-4 sm:p-6">
-                <div className="relative group">
-                  <div className="w-32 h-32 sm:w-full sm:aspect-square mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-[#009689] to-[#00c4b4] flex items-center justify-center">
+            <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white">
+              <CardContent className="p-8">
+                <div className="relative group mx-auto mb-8">
+                  <div className="absolute -inset-2 bg-gradient-to-br from-[#009689] to-[#ffd8af] rounded-[2.5rem] opacity-20 group-hover:opacity-40 transition-opacity blur"></div>
+                  <div className="relative w-48 h-48 mx-auto rounded-[2rem] overflow-hidden bg-gradient-to-br from-[#009689] to-[#00c4b4] flex items-center justify-center shadow-inner">
                     {userData?.picture ? (
                       <img
                         src={userData.picture}
                         alt={userData.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (
-                      <div className="text-white text-3xl sm:text-6xl font-black">
+                      <div className="text-white text-7xl font-black">
                         {userData?.name?.charAt(0).toUpperCase()}
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="mt-4 sm:mt-6 text-center">
-                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 line-clamp-2">
+                <div className="text-center">
+                  <h2 className="text-3xl font-black text-slate-900 mb-2 truncate px-2">
                     {userData?.name || "Unknown User"}
                   </h2>
-                  <Badge className="mt-2 bg-[#009689] hover:bg-[#007a6e] text-white font-bold capitalize text-xs sm:text-sm">
+                  <Badge className="bg-[#009689] hover:bg-[#007a6e] text-white font-black px-6 py-1.5 rounded-xl uppercase tracking-tighter text-sm shadow-md">
                     {userData?.role?.toLowerCase() || "user"}
                   </Badge>
                 </div>
 
-                <Separator className="my-4" />
+                <Separator className="my-8 bg-slate-100" />
 
                 {/* Wallet Balance Section */}
-                <div className="bg-gradient-to-br from-[#ffd8af]/20 to-[#009689]/10 rounded-xl p-3 sm:p-4 mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
-                      <span className="text-xs sm:text-sm font-bold text-slate-700">
-                        Wallet Balance
+                <div className="bg-slate-50 border-2 border-[#009689]/10 rounded-[2rem] p-6 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#ffd8af]/20 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150"></div>
+                  <div className="flex items-center justify-between mb-4 relative z-10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-[#009689] text-white rounded-lg flex items-center justify-center shadow-lg">
+                        <Wallet className="w-5 h-5" />
+                      </div>
+                      <span className="text-sm font-black text-slate-700 uppercase tracking-tighter">
+                        Balance
                       </span>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={toggleBalance}
-                      className="h-6 w-6 sm:h-8 sm:w-8"
+                      className="h-10 w-10 hover:bg-[#009689]/10 rounded-full"
                     >
                       {showBalance ? (
-                        <EyeOff className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
+                        <EyeOff className="w-5 h-5 text-[#009689]" />
                       ) : (
-                        <Eye className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
+                        <Eye className="w-5 h-5 text-[#009689]" />
                       )}
                     </Button>
                   </div>
-                  <div className="text-center">
-                    {showBalance ? (
-                      <div className="space-y-1">
-                        <p className="text-2xl sm:text-3xl font-black text-[#009689]">
-                          ৳{wallet?.balance?.toLocaleString() || 0}
-                        </p>
-                        <p className="text-xs text-slate-600 font-semibold">
-                          {wallet?.currency || "BDT"}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-2xl sm:text-3xl font-black text-slate-400">
-                        ••••••
-                      </p>
-                    )}
+                  <div className="text-center relative z-10">
+                    <AnimatePresence mode="wait">
+                      {showBalance ? (
+                        <motion.div
+                          key="bal"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                        >
+                          <p className="text-4xl font-black text-[#009689] tracking-tighter">
+                            ৳{wallet?.balance?.toLocaleString() || 0}
+                          </p>
+                          <p className="text-xs text-slate-400 font-bold tracking-[0.2em] mt-1 uppercase">
+                            {wallet?.currency || "BDT"}
+                          </p>
+                        </motion.div>
+                      ) : (
+                        <motion.p
+                          key="hid"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="text-4xl font-black text-slate-200 tracking-[0.3em]"
+                        >
+                          ••••••
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
                   </div>
                   <Badge
-                    className={`mt-3 w-full justify-center text-xs ${
-                      wallet?.walletStatus === WalletStatusValues.ACTIVE
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-red-500 hover:bg-red-600"
-                    } text-white font-semibold`}
+                    className={`mt-6 w-full justify-center py-2.5 rounded-xl border-none font-black text-xs h-9 ${wallet?.walletStatus === WalletStatusValues.ACTIVE
+                        ? "bg-green-500 text-white shadow-green-200 shadow-lg"
+                        : "bg-red-500 text-white shadow-red-200 shadow-lg"
+                      }`}
                   >
                     {wallet?.walletStatus || "UNKNOWN"}
                   </Badge>
                 </div>
 
-                <Separator className="my-4" />
-
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-slate-600 font-semibold">Status</span>
+                <div className="space-y-4 mt-8">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                    <span className="text-sm font-bold text-slate-500">Status</span>
                     <Badge
-                      className={`text-xs ${
-                        userData?.isActive === IsActiveValues.ACTIVE
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-red-500 hover:bg-red-600"
-                      } text-white font-semibold capitalize`}
+                      className={`font-black uppercase tracking-tighter ${userData?.isActive === IsActiveValues.ACTIVE
+                          ? "bg-green-100 text-green-600 hover:bg-green-100"
+                          : "bg-red-100 text-red-600 hover:bg-red-100"
+                        } border-none`}
                     >
                       {userData?.isActive || "UNKNOWN"}
                     </Badge>
                   </div>
 
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-slate-600 font-semibold">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                    <span className="text-sm font-bold text-slate-500">
                       Verified
                     </span>
                     {userData?.isVerified ? (
-                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
+                      <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg">
+                        <CheckCircle className="w-5 h-5" />
+                      </div>
                     ) : (
-                      <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+                      <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white shadow-lg">
+                        <XCircle className="w-5 h-5" />
+                      </div>
                     )}
-                  </div>
-                  
-                  {userData?.agentInfo && (
-                    <div className="flex items-center justify-between text-xs sm:text-sm">
-                      <span className="text-slate-600 font-semibold">
-                        Total Commission
-                      </span>
-                      <p className="text-sm sm:text-base font-bold text-[#009689]">
-                        ৳{userData.agentInfo.totalCommission || 0}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-slate-600 font-semibold">
-                      Total Transactions
-                    </span>
-                    <Badge className="bg-[#ffd8af] text-[#009689] hover:bg-[#ffd8af] font-bold text-xs">
-                      {transactionData?.total || 0}
-                    </Badge>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
           {/* Right Column - Profile Information */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <motion.div variants={itemVariants} className="lg:col-span-2 space-y-8">
             {/* Personal Information */}
-            <Card className="border-2 border-[#009689]/20">
-              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
-                <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2">
-                  <User className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white">
+              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-8 border-b border-slate-50">
+                <CardTitle className="text-2xl font-black text-slate-900 flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#009689]">
+                    <User className="w-7 h-7" />
+                  </div>
                   Personal Information
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6">
-                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="space-y-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
-                      Full Name
+              <CardContent className="p-10">
+                <div className="grid md:grid-cols-2 gap-10">
+                  <div className="space-y-3">
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                      Full Legal Name
                     </span>
-                    <div className="flex items-center gap-2 text-sm sm:text-base font-semibold text-slate-900">
-                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                      {userData?.name || "Not provided"}
+                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-[#009689]/20 transition-all group">
+                      <User className="w-5 h-5 text-[#009689] transition-transform group-hover:scale-125" />
+                      <span className="font-black text-slate-800 text-lg">{userData?.name || "Not provided"}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
+                  <div className="space-y-3">
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
                       Email Address
                     </span>
-                    <div className="flex items-center gap-2 text-sm sm:text-base font-medium text-slate-900">
-                      <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                      {userData?.email || "Not provided"}
+                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-[#009689]/20 transition-all group">
+                      <Mail className="w-5 h-5 text-[#009689] transition-transform group-hover:scale-125" />
+                      <span className="font-bold text-slate-600 text-base">{userData?.email || "Not provided"}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
-                      Phone Number
+                  <div className="space-y-3">
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                      Mobile Number
                     </span>
-                    <div className="flex items-center gap-2 text-sm sm:text-base font-medium text-slate-900">
-                      <Phone className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                      {userData?.phone || "Not provided"}
+                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-[#009689]/20 transition-all group">
+                      <Phone className="w-5 h-5 text-[#009689] transition-transform group-hover:scale-125" />
+                      <span className="font-black text-slate-800 text-lg">{userData?.phone || "Not provided"}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
+                  <div className="space-y-3">
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
                       National ID (NID)
                     </span>
-                    <div className="flex items-center gap-2 text-sm sm:text-base font-bold text-slate-900">
-                      <CreditCard className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                      {userData?.nid || "Not provided"}
+                    <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-[#009689]/20 transition-all group">
+                      <CreditCard className="w-5 h-5 text-[#009689] transition-transform group-hover:scale-125" />
+                      <span className="font-mono font-black text-slate-800 text-lg">{userData?.nid || "Not provided"}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2 md:col-span-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
-                      Address
+                  <div className="space-y-3 md:col-span-2">
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                      Primary Address
                     </span>
-                    <div className="flex items-start gap-2 text-sm sm:text-base font-medium text-slate-900">
-                      <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689] mt-1 flex-shrink-0" />
-                      <span className="break-words">{userData?.address || "Not provided"}</span>
+                    <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-[#009689]/20 transition-all group">
+                      <MapPin className="w-5 h-5 text-[#009689] mt-1 transition-transform group-hover:scale-125" />
+                      <span className="font-bold text-slate-600 leading-relaxed">{userData?.address || "Not provided"}</span>
                     </div>
-                  </div>
-
-                  {userData?.agentInfo && (
-                    <>
-                      <div className="space-y-2">
-                        <span className="text-xs sm:text-sm font-bold text-slate-600">
-                          TIN ID
-                        </span>
-                        <p className="text-sm sm:text-base font-bold text-slate-900">
-                          {userData.agentInfo.tinId || "Not provided"}
-                        </p>
-                      </div>
-                      <div className="space-y-2">
-                        <span className="text-xs sm:text-sm font-bold text-slate-600">
-                          Approval Status
-                        </span>
-                        <Badge
-                          className={`text-xs ${
-                            userData.agentInfo.approvalStatus === "pending"
-                              ? "bg-yellow-500"
-                              : userData.agentInfo.approvalStatus === "approved"
-                              ? "bg-green-500"
-                              : "bg-red-500"
-                          } text-white font-bold capitalize`}
-                        >
-                          {userData.agentInfo.approvalStatus || "unknown"}
-                        </Badge>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="space-y-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
-                      Account Created
-                    </span>
-                    <p className="text-sm sm:text-base font-semibold text-slate-900">
-                      {userData?.createdAt
-                        ? new Date(userData.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
-                          )
-                        : "Not available"}
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-600">
-                      Last Updated
-                    </span>
-                    <p className="text-sm sm:text-base font-semibold text-slate-900">
-                      {userData?.updatedAt
-                        ? new Date(userData.updatedAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            }
-                          )
-                        : "Not available"}
-                    </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Latest Transactions */}
-            <Card className="border-2 border-[#009689]/20">
-              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
-                <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2">
-                  <Receipt className="w-4 h-4 sm:w-5 sm:h-5" />
-                  Latest Transactions
+            <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white">
+              <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-8 border-b border-slate-50">
+                <CardTitle className="text-2xl font-black text-slate-900 flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#009689]">
+                    <Receipt className="w-7 h-7" />
+                  </div>
+                  Recent Activity
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-2 sm:p-4">
+              <CardContent className="p-4 sm:p-8">
                 {latestTransactions.length > 0 ? (
-                  <div className="">
-                    {latestTransactions.map((transaction) => {
+                  <div className="space-y-4">
+                    {latestTransactions.map((transaction, idx) => {
                       const {
                         icon: Icon,
                         color,
@@ -467,124 +421,81 @@ const Profile: React.FC = () => {
                       } = getTransactionIcon(transaction.type);
 
                       return (
-                        <div
+                        <motion.div
                           key={transaction._id}
-                          className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:px-4 sm:py-3 bg-slate-50 rounded-lg hover:bg-[#009689]/5 transition-colors"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 + idx * 0.1 }}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-slate-50 hover:bg-white border-2 border-transparent hover:border-[#009689]/10 rounded-3xl transition-all duration-300 shadow-sm hover:shadow-xl group"
                         >
-                          {/* Left Side - Icon & Details */}
-                          <div className="flex items-start sm:items-center gap-3 flex-1 mb-3 sm:mb-0">
-                            <div
-                              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${bg} flex items-center justify-center flex-shrink-0`}
-                            >
-                              <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${color}`} />
+                          <div className="flex items-start sm:items-center gap-6 flex-1 mb-4 sm:mb-0">
+                            <div className={`w-16 h-16 rounded-2xl ${bg} flex items-center justify-center flex-shrink-0 shadow-inner group-hover:scale-110 transition-transform`}>
+                              <Icon className={`w-8 h-8 ${color}`} />
                             </div>
 
                             <div className="flex-1 min-w-0">
-                              <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-1">
-                                <h3 className="font-black text-slate-900 text-sm sm:text-base">
+                              <div className="flex flex-wrap items-center gap-3 mb-2">
+                                <h3 className="font-black text-slate-900 text-lg">
                                   {transaction.type.replace(/_/g, " ")}
                                 </h3>
-                                <div className="flex flex-wrap gap-1">
-                                  <Badge
-                                    className={`${getTransactionBadgeColor(
-                                      transaction.type
-                                    )} text-white font-semibold text-xs`}
-                                  >
-                                    {transaction.initiatedBy}
-                                  </Badge>
-                                  <Badge 
-                                    className={`text-xs ${
-                                      transaction.status === "COMPLETED" 
-                                        ? "bg-green-500" 
-                                        : transaction.status === "PENDING"
-                                        ? "bg-yellow-500"
-                                        : "bg-red-500"
-                                    } text-white`}
-                                  >
-                                    {transaction.status}
-                                  </Badge>
-                                </div>
+                                <Badge className={`uppercase tracking-tighter text-[10px] font-black py-0.5 px-3 rounded-md ${transaction.status === "COMPLETED"
+                                    ? "bg-green-100 text-green-600"
+                                    : transaction.status === "PENDING"
+                                      ? "bg-yellow-100 text-yellow-600"
+                                      : "bg-red-100 text-red-600"
+                                  } border-none shadow-none`}>
+                                  {transaction.status}
+                                </Badge>
                               </div>
 
-                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-slate-600">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
+                              <div className="flex flex-wrap gap-4 text-xs font-bold text-slate-400 mb-2">
+                                <span className="flex items-center gap-1.5 px-2 py-1 bg-white rounded-lg">
+                                  <Calendar className="w-3.5 h-3.5 text-[#009689]" />
                                   {formatDate(transaction.createdAt)}
                                 </span>
-                                <span className="hidden sm:block">•</span>
-                                <span className="text-xs">
-                                  ID: {transaction._id.slice(-8)}
+                                <span className="flex items-center gap-1.5 px-2 py-1 bg-white rounded-lg">
+                                  <CreditCard className="w-3.5 h-3.5 text-[#009689]" />
+                                  {transaction._id.slice(-10)}
                                 </span>
                               </div>
-
-                              {/* User Information */}
-                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs text-slate-500 mt-1">
+                              <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
                                 {transaction.from && (
-                                  <span>From: {transaction.from.name}</span>
+                                  <span className="bg-white/60 px-2 py-1 rounded-md">From: {transaction.from.name}</span>
                                 )}
                                 {transaction.to && (
-                                  <span>To: {transaction.to?.name || 'System'}</span>
+                                  <span className="bg-white/60 px-2 py-1 rounded-md">To: {transaction.to?.name || 'System'}</span>
                                 )}
                               </div>
                             </div>
                           </div>
 
-                          {/* Right Side - Amount */}
-                          <div className="text-left sm:text-right">
-                            <p
-                              className={`text-lg sm:text-xl font-black ${
-                                transaction.type === "CASH_IN" || transaction.type === "ADD_MONEY"
-                                  ? "text-green-600"
-                                  : "text-red-600"
-                              }`}
-                            >
-                              {(transaction.type === "CASH_IN" || transaction.type === "ADD_MONEY") ? "+" : "-"}৳
-                              {transaction.amount.toLocaleString()}
+                          <div className="text-left sm:text-right px-4">
+                            <p className={`text-3xl font-black mb-1 tracking-tighter ${transaction.type === "CASH_IN" || transaction.type === "ADD_MONEY"
+                                ? "text-green-600"
+                                : "text-red-600"
+                              }`}>
+                              {(transaction.type === "CASH_IN" || transaction.type === "ADD_MONEY") ? "+" : "-"}৳{transaction.amount.toLocaleString()}
                             </p>
-
-                            {/* Commission Information */}
-                            {(transaction.commission.systemFee > 0 ||
-                              transaction.commission.agentCommission > 0 ||
-                              transaction.commission.superAdminCommission > 0) && (
-                              <div className="mt-2 space-y-1 flex flex-wrap gap-1">
-                                {transaction.commission.systemFee > 0 && (
-                                  <Badge variant="outline" className="text-xs">
-                                    System Fee: ৳{transaction.commission.systemFee}
-                                  </Badge>
-                                )}
-                                {(transaction.commission.agentCommission > 0 ||
-                                  transaction.commission.superAdminCommission > 0) && (
-                                  <Badge variant="outline" className="text-xs">
-                                    Fees: ৳
-                                    {transaction.commission.agentCommission +
-                                      transaction.commission.superAdminCommission}
-                                  </Badge>
-                                )}
-                              </div>
-                            )}
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                              Transaction Fee: ৳{transaction.commission.systemFee + (transaction.commission.agentCommission || 0)}
+                            </p>
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-8 sm:py-12">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                      <Receipt className="w-6 h-6 sm:w-8 sm:h-8 text-slate-400" />
-                    </div>
-                    <p className="text-slate-600 font-semibold text-sm sm:text-base">
-                      No transactions yet
-                    </p>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                      Your transaction history will appear here
-                    </p>
+                  <div className="text-center py-20 bg-slate-50 rounded-[2.5rem] border-2 border-dashed border-slate-200">
+                    <Receipt className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                    <h3 className="text-2xl font-black text-slate-800">Clean Slate</h3>
+                    <p className="text-slate-500 font-bold">Your transactions will start appearing here.</p>
                   </div>
                 )}
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

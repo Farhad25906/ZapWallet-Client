@@ -12,8 +12,11 @@ import {
   Key,
   Eye,
   EyeOff,
+  Lock,
 } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
+import SectionHeader from "@/components/modules/HomePages/SectionHeader";
 
 interface FormData {
   oldPin: string;
@@ -52,7 +55,6 @@ const SecuritySettings = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Only allow numbers
     if (value && !/^\d*$/.test(value)) {
       return;
     }
@@ -62,7 +64,6 @@ const SecuritySettings = () => {
       [name]: value,
     }));
 
-    // Clear error for this field
     if (errors[name as keyof Errors]) {
       setErrors((prev) => ({
         ...prev,
@@ -119,14 +120,12 @@ const SecuritySettings = () => {
       await resetPassword(payload).unwrap();
       toast.success("PIN changed successfully!");
 
-      // Reset form
       setFormData({
         oldPin: "",
         newPin: "",
         confirmNewPin: "",
       });
       setErrors({});
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to change PIN");
       console.error(error);
@@ -142,325 +141,231 @@ const SecuritySettings = () => {
     setErrors({});
   };
 
-  // Check if form has any values and all required fields are filled
   const isFormEmpty = !formData.oldPin && !formData.newPin && !formData.confirmNewPin;
-  
-  // Check if form has validation errors
   const hasErrors = Object.keys(errors).length > 0;
-
-  // Button should be disabled when:
-  // 1. Loading, OR
-  // 2. Form is empty, OR
-  // 3. There are validation errors
   const isSubmitDisabled = isLoading || isFormEmpty || hasErrors;
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 sm:p-6">
-      <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+    <div className="min-h-screen bg-transparent p-4 sm:p-6 overflow-hidden">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-4xl mx-auto space-y-10"
+      >
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-[#009689] flex items-center justify-center mx-auto sm:mx-0">
-            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-          </div>
-          <div className="text-center sm:text-left">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#009689]">
-              Security Settings
-            </h1>
-            <p className="text-slate-600 mt-1 text-sm sm:text-base">
-              Manage your account security and PIN
-            </p>
-          </div>
-        </div>
+        <SectionHeader
+          badge="Security"
+          title="Account Protection"
+          subtitle="Manage your secure access credentials and monitor account safety status."
+          center={false}
+        />
 
         {/* Security Status */}
-        <Card className="border-2 border-green-200 bg-gradient-to-r from-green-50 to-white">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
-                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <div className="text-center sm:text-left">
-                <h3 className="font-bold text-base sm:text-lg text-slate-900 mb-2">
-                  Account Secured
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 mb-3">
-                  Your account is protected with a secure PIN. Change it
-                  regularly to keep your account safe.
-                </p>
-                <div className="flex flex-wrap justify-center sm:justify-start gap-2">
-                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">
-                    <CheckCircle className="w-3 h-3 mr-1" />
-                    PIN Protected
-                  </Badge>
-                  <Badge className="bg-blue-500 hover:bg-blue-600 text-white text-xs">
-                    <CheckCircle className="w-3 h-3 mr-1" />
-                    Email Verified
-                  </Badge>
-                  <Badge className="bg-[#009689] hover:bg-[#007a6e] text-white text-xs">
-                    <CheckCircle className="w-3 h-3 mr-1" />
-                    Active Account
-                  </Badge>
+        <motion.div variants={itemVariants}>
+          <Card className="border-none shadow-2xl bg-gradient-to-r from-[#009689] to-[#00c4b4] text-white rounded-[3rem] overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+            <CardContent className="p-8 sm:p-12 relative z-10">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8">
+                <div className="w-20 h-20 rounded-3xl bg-white/20 flex items-center justify-center flex-shrink-0 animate-pulse">
+                  <Shield className="w-10 h-10 text-white" />
+                </div>
+                <div className="text-center sm:text-left flex-1">
+                  <h3 className="font-black text-3xl mb-4">Account Fully Secured</h3>
+                  <p className="text-white/80 text-lg mb-8 leading-relaxed max-w-xl">
+                    Your account is protected with bank-level security. We recommend changing your PIN every 90 days for maximum safety.
+                  </p>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                    <Badge className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/20 font-black px-6 py-2 rounded-xl text-xs uppercase tracking-widest backdrop-blur-md">
+                      PIN Active
+                    </Badge>
+                    <Badge className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/20 font-black px-6 py-2 rounded-xl text-xs uppercase tracking-widest backdrop-blur-md">
+                      2FA Enabled
+                    </Badge>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Change PIN Form */}
-        <Card className="border-2 border-[#009689]/20">
-          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
-            <CardTitle className="text-xl sm:text-2xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
-              <Key className="w-5 h-5 sm:w-6 sm:h-6" />
-              Change PIN
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6">
-            <div className="space-y-4 sm:space-y-6">
-              {/* Current PIN */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="oldPin"
-                  className="text-xs sm:text-sm font-bold text-slate-700"
-                >
-                  Current PIN
-                </Label>
-                <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
-                  <Input
-                    id="oldPin"
-                    name="oldPin"
-                    type={showPins.oldPin ? "text" : "password"}
-                    placeholder="Enter current PIN"
-                    value={formData.oldPin}
-                    onChange={handleChange}
-                    className="pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 focus:border-[#009689] text-base sm:text-lg font-bold h-11 sm:h-12"
-                    maxLength={6}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggleShowPin("oldPin")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#009689]"
-                  >
-                    {showPins.oldPin ? (
-                      <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                  </button>
+        <motion.div variants={itemVariants}>
+          <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white">
+            <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-10 border-b border-slate-50">
+              <CardTitle className="text-2xl font-black text-slate-900 flex items-center gap-4">
+                <div className="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-[#009689]">
+                  <Key className="w-7 h-7" />
                 </div>
-                {errors.oldPin && (
-                  <p className="text-xs sm:text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {errors.oldPin}
-                  </p>
-                )}
-              </div>
+                Update Access PIN
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-10">
+              <div className="grid md:grid-cols-2 gap-12">
+                <div className="space-y-8">
+                  {/* Current PIN */}
+                  <div className="space-y-3">
+                    <Label htmlFor="oldPin" className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Current PIN</Label>
+                    <div className="relative group">
+                      <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-[#009689] transition-colors" />
+                      <Input
+                        id="oldPin"
+                        name="oldPin"
+                        type={showPins.oldPin ? "text" : "password"}
+                        placeholder="••••••"
+                        value={formData.oldPin}
+                        onChange={handleChange}
+                        className="pl-14 h-16 rounded-2xl border-none bg-slate-50 focus-visible:ring-2 focus-visible:ring-[#009689] text-2xl font-black tracking-widest"
+                        maxLength={6}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => toggleShowPin("oldPin")}
+                        className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#009689] transition-colors"
+                      >
+                        {showPins.oldPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                    {errors.oldPin && <p className="text-xs font-bold text-red-500 flex items-center gap-2 ml-1"><AlertCircle className="w-4 h-4" />{errors.oldPin}</p>}
+                  </div>
 
-              {/* New PIN */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="newPin"
-                  className="text-xs sm:text-sm font-bold text-slate-700"
-                >
-                  New PIN
-                </Label>
-                <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
-                  <Input
-                    id="newPin"
-                    name="newPin"
-                    type={showPins.newPin ? "text" : "password"}
-                    placeholder="Enter new PIN"
-                    value={formData.newPin}
-                    onChange={handleChange}
-                    className="pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 focus:border-[#009689] text-base sm:text-lg font-bold h-11 sm:h-12"
-                    maxLength={6}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggleShowPin("newPin")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#009689]"
-                  >
-                    {showPins.newPin ? (
-                      <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                  </button>
+                  {/* New PIN */}
+                  <div className="space-y-3">
+                    <Label htmlFor="newPin" className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">New PIN</Label>
+                    <div className="relative group">
+                      <Key className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-[#009689] transition-colors" />
+                      <Input
+                        id="newPin"
+                        name="newPin"
+                        type={showPins.newPin ? "text" : "password"}
+                        placeholder="••••••"
+                        value={formData.newPin}
+                        onChange={handleChange}
+                        className="pl-14 h-16 rounded-2xl border-none bg-slate-50 focus-visible:ring-2 focus-visible:ring-[#009689] text-2xl font-black tracking-widest"
+                        maxLength={6}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => toggleShowPin("newPin")}
+                        className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#009689] transition-colors"
+                      >
+                        {showPins.newPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                    {errors.newPin && <p className="text-xs font-bold text-red-500 flex items-center gap-2 ml-1"><AlertCircle className="w-4 h-4" />{errors.newPin}</p>}
+                  </div>
+
+                  {/* Confirm New PIN */}
+                  <div className="space-y-3">
+                    <Label htmlFor="confirmNewPin" className="text-sm font-black text-slate-400 uppercase tracking-widest ml-1">Confirm New PIN</Label>
+                    <div className="relative group">
+                      <CheckCircle className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-[#009689] transition-colors" />
+                      <Input
+                        id="confirmNewPin"
+                        name="confirmNewPin"
+                        type={showPins.confirmNewPin ? "text" : "password"}
+                        placeholder="••••••"
+                        value={formData.confirmNewPin}
+                        onChange={handleChange}
+                        className="pl-14 h-16 rounded-2xl border-none bg-slate-50 focus-visible:ring-2 focus-visible:ring-[#009689] text-2xl font-black tracking-widest"
+                        maxLength={6}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => toggleShowPin("confirmNewPin")}
+                        className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#009689] transition-colors"
+                      >
+                        {showPins.confirmNewPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                    {errors.confirmNewPin && <p className="text-xs font-bold text-red-500 flex items-center gap-2 ml-1"><AlertCircle className="w-4 h-4" />{errors.confirmNewPin}</p>}
+                  </div>
                 </div>
-                {errors.newPin && (
-                  <p className="text-xs sm:text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {errors.newPin}
-                  </p>
-                )}
-              </div>
 
-              {/* Confirm New PIN */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="confirmNewPin"
-                  className="text-xs sm:text-sm font-bold text-slate-700"
-                >
-                  Confirm New PIN
-                </Label>
-                <div className="relative">
-                  <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#009689]" />
-                  <Input
-                    id="confirmNewPin"
-                    name="confirmNewPin"
-                    type={showPins.confirmNewPin ? "text" : "password"}
-                    placeholder="Re-enter new PIN"
-                    value={formData.confirmNewPin}
-                    onChange={handleChange}
-                    className="pl-10 sm:pl-12 pr-10 sm:pr-12 border-2 focus:border-[#009689] text-base sm:text-lg font-bold h-11 sm:h-12"
-                    maxLength={6}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => toggleShowPin("confirmNewPin")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#009689]"
-                  >
-                    {showPins.confirmNewPin ? (
-                      <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
-                    ) : (
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                  </button>
+                <div className="space-y-8 flex flex-col">
+                  <div className="bg-slate-50 border-2 border-slate-100 rounded-[2rem] p-8 flex-1">
+                    <h4 className="font-black text-slate-900 text-lg mb-6 flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-[#009689]" />
+                      PIN Requirements
+                    </h4>
+                    <ul className="space-y-4">
+                      {[
+                        "Must be exactly 6 numeric digits",
+                        "Cannot match your current PIN",
+                        "Avoid using sequential numbers (123456)",
+                        "Avoid using repeating numbers (000000)"
+                      ].map((req, i) => (
+                        <li key={i} className="flex items-center gap-3 text-sm font-bold text-slate-500">
+                          <CheckCircle className="w-4 h-4 text-[#009689]" />
+                          {req}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={isSubmitDisabled}
+                      className="flex-1 bg-[#009689] hover:bg-[#007a6e] text-white font-black py-8 rounded-[2rem] text-xl shadow-2xl hover:shadow-[#009689]/40 transition-all disabled:opacity-50 group"
+                    >
+                      {isLoading ? "Saving..." : (
+                        <>
+                          Update PIN Now
+                          <Shield className="ml-3 w-6 h-6 group-hover:scale-125 transition-transform" />
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      onClick={handleCancel}
+                      disabled={isLoading}
+                      variant="outline"
+                      className="px-10 py-8 rounded-[2rem] border-4 border-slate-100 font-black text-slate-400 hover:text-slate-600 transition-all"
+                    >
+                      Reset
+                    </Button>
+                  </div>
                 </div>
-                {errors.confirmNewPin && (
-                  <p className="text-xs sm:text-sm text-red-600 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {errors.confirmNewPin}
-                  </p>
-                )}
               </div>
-
-              {/* PIN Requirements */}
-              <div className="bg-[#ffd8af]/10 border-2 border-[#ffd8af]/30 rounded-lg p-3 sm:p-4">
-                <p className="text-xs sm:text-sm font-bold text-slate-900 mb-2">
-                  PIN Requirements:
-                </p>
-                <ul className="space-y-1 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                    Minimum 4 digits
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                    Only numeric characters (0-9)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                    Different from current PIN
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                    Avoid easily guessable PINs (1234, 0000, etc.)
-                  </li>
-                </ul>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitDisabled}
-                  className="flex-1 bg-[#009689] hover:bg-[#007a6e] text-white font-bold py-4 sm:py-6 text-base sm:text-lg shadow-xl disabled:bg-slate-400 disabled:cursor-not-allowed order-2 sm:order-1"
-                >
-                  {isLoading ? (
-                    "Changing PIN..."
-                  ) : (
-                    <>
-                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                      Change PIN
-                    </>
-                  )}
-                </Button>
-                <Button
-                  onClick={handleCancel}
-                  disabled={isLoading}
-                  variant="outline"
-                  className="border-2 border-slate-300 font-bold py-4 sm:py-6 px-4 sm:px-8 disabled:border-slate-200 disabled:text-slate-400 order-1 sm:order-2"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Security Tips */}
-        <Card className="border-2 border-[#009689]/20">
-          <CardHeader className="bg-gradient-to-r from-[#009689]/5 to-[#ffd8af]/5 p-4 sm:p-6">
-            <CardTitle className="text-lg sm:text-xl font-black text-[#009689] flex items-center gap-2 justify-center sm:justify-start">
-              <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
-              Security Tips
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 sm:p-6">
-            <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
-                    Change PIN Regularly
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Update your PIN every 3-6 months for better security
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
-                    Never Share Your PIN
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    ZapWallet will never ask for your PIN via email or phone
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
-                    Use Strong PINs
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Avoid sequential or repeated numbers
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#009689]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-[#009689]" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900 text-sm sm:text-base mb-1">
-                    Enable Notifications
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Get alerts for all account activities
-                  </p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        <div className="grid md:grid-cols-2 gap-8">
+          {[
+            { title: "2FA Protection", desc: "Enable two-factor authentication for an extra layer of security beyond your PIN.", icon: Shield },
+            { title: "Regular Updates", desc: "Change your access credentials every 90 days to minimize risk of unauthorized access.", icon: Clock }
+          ].map((tip, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <Card className="border-none shadow-xl rounded-[2.5rem] bg-white overflow-hidden group">
+                <CardContent className="p-8 flex gap-6 items-center">
+                  <div className="w-16 h-16 rounded-2xl bg-[#009689]/10 flex items-center justify-center text-[#009689] group-hover:scale-110 transition-transform">
+                    <tip.icon className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-lg mb-1">{tip.title}</h4>
+                    <p className="text-sm font-bold text-slate-500 leading-relaxed">{tip.desc}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 };
 
 export default SecuritySettings;
+import { Clock } from "lucide-react";
