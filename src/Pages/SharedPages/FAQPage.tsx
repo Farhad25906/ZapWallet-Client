@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { ChevronDown, Search, HelpCircle, MessageCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Search, HelpCircle, MessageCircle, Plus, Minus } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import SectionHeader from "@/components/modules/HomePages/SectionHeader";
 
-// Define types
 type FAQItem = {
   question: string;
   answer: string;
@@ -17,13 +17,9 @@ type FAQCategory = {
   questions: FAQItem[];
 };
 
-type OpenItems = string[];
-type CategoryIndex = number;
-type QuestionIndex = number;
-
 const FAQPage = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [openItems, setOpenItems] = useState<OpenItems>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeItem, setActiveItem] = useState<string | null>("0-0");
 
   const faqCategories: FAQCategory[] = [
     {
@@ -36,11 +32,7 @@ const FAQPage = () => {
         },
         {
           question: "What documents do I need to register?",
-          answer: "For basic accounts, you only need a valid phone number. For higher transaction limits, you'll need to verify your identity with a National ID card or passport, and a recent photograph. The verification process is quick and secure."
-        },
-        {
-          question: "Is ZapWallet free to use?",
-          answer: "Yes! Creating and maintaining a ZapWallet account is completely free. We only charge small fees for certain transactions: ৳5 per Send Money transaction and 1.5% for Cash Out. Cash In is always free."
+          answer: "For basic accounts, you only need a valid phone number. For higher transaction limits, you'll need to verify your identity with a National ID card or passport, and a recent photograph."
         }
       ]
     },
@@ -50,19 +42,11 @@ const FAQPage = () => {
       questions: [
         {
           question: "How much does it cost to send money?",
-          answer: "Sending money to another ZapWallet user costs only ৳5 per transaction, regardless of the amount. This flat fee makes it affordable whether you're sending ৳100 or ৳10,000."
+          answer: "Sending money to another ZapWallet user costs only ৳5 per transaction, regardless of the amount. This flat fee makes it affordable for everyone."
         },
         {
           question: "What are the Cash Out fees?",
-          answer: "Cash Out fees are 1.5% of the withdrawal amount. For example, withdrawing ৳10,000 would cost ৳150. There's no fixed fee, so smaller withdrawals have proportionally smaller fees."
-        },
-        {
-          question: "Are there any limits on transactions?",
-          answer: "Personal accounts have daily limits of ৳50,000 and monthly limits of ৳1,000,000. Business accounts have higher limits (৳500,000/day) and unlimited monthly transactions. Limits can be increased with identity verification."
-        },
-        {
-          question: "How long do transfers take?",
-          answer: "All ZapWallet transfers are instant! Whether you're sending money to a friend or cashing in at an agent, transactions complete in real-time. You'll receive immediate confirmation on your phone."
+          answer: "Cash Out fees are competitive at 1.5% of the withdrawal amount. For example, withdrawing ৳1,000 would cost only ৳15."
         }
       ]
     },
@@ -72,166 +56,143 @@ const FAQPage = () => {
       questions: [
         {
           question: "How secure is my money with ZapWallet?",
-          answer: "Your money is protected by bank-level 256-bit encryption, secure PIN authentication, and biometric login options. We're licensed by Bangladesh Bank and follow strict financial regulations to keep your funds safe."
+          answer: "Your money is protected by bank-level 256-bit encryption, secure PIN authentication, and biometric login options. We follow strict financial regulations to keep your funds safe."
         },
         {
           question: "What if I forget my PIN?",
-          answer: "You can reset your PIN easily through the app. Go to Settings > Security > Reset PIN. You'll need to verify your identity via OTP sent to your registered phone number. For additional security, you can also contact our support team."
-        },
-        {
-          question: "Can someone access my account if I lose my phone?",
-          answer: "No. Your account is protected by your PIN and optional biometric authentication. If you lose your phone, immediately contact our support team to temporarily freeze your account. You can then access your account from a new device after verification."
-        },
-        {
-          question: "How do I report suspicious activity?",
-          answer: "If you notice any unauthorized transactions, immediately contact our 24/7 support at +880 1234-567890 or email security@zapwallet.com. We'll investigate and freeze suspicious activity within minutes to protect your account."
+          answer: "You can reset your PIN easily through the app via OTP verification or by contacting our 24/7 support center."
         }
       ]
     },
   ];
 
-  const toggleItem = (categoryIndex: CategoryIndex, questionIndex: QuestionIndex): void => {
-    const itemKey = `${categoryIndex}-${questionIndex}`;
-    setOpenItems(prev => 
-      prev.includes(itemKey) 
-        ? prev.filter(key => key !== itemKey)
-        : [...prev, itemKey]
-    );
-  };
-
-  const isOpen = (categoryIndex: CategoryIndex, questionIndex: QuestionIndex): boolean => {
-    return openItems.includes(`${categoryIndex}-${questionIndex}`);
-  };
-
-  const filteredCategories = faqCategories.map(category => ({
-    ...category,
-    questions: category.questions.filter(q => 
-      searchQuery === "" || 
+  const filteredCategories = faqCategories.map(cat => ({
+    ...cat,
+    questions: cat.questions.filter(q =>
       q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       q.answer.toLowerCase().includes(searchQuery.toLowerCase())
     )
-  })).filter(category => category.questions.length > 0);
+  })).filter(cat => cat.questions.length > 0);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="py-20 bg-[#009689] text-white">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="mb-6 bg-white text-[#009689] hover:bg-white px-4 py-2">
-              Help Center
-            </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6">
-              Frequently Asked Questions
-            </h1>
-            <p className="text-xl text-white/90 leading-relaxed mb-8">
-              Find answers to common questions about ZapWallet
-            </p>
+      {/* Hero Header */}
+      <section className="pt-32 pb-20 bg-slate-50 border-b border-slate-100">
+        <div className="container mx-auto px-6">
+          <SectionHeader
+            badge="Help Center"
+            title="Have Some Questions?"
+            subtitle="Find quick answers to common queries about our platform, security, and services."
+          />
 
-            {/* Search Bar */}
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <Input
-                type="text"
-                placeholder="Search for answers..."
-                value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-6 text-lg border-2 border-white/20 bg-white/10 text-white placeholder:text-white/60 focus:border-white focus:bg-white/20"
-              />
+          <div className="max-w-2xl mx-auto relative group mt-8">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#009689] transition-colors" />
+            <Input
+              placeholder="Search help articles..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-14 h-16 rounded-2xl border-none bg-white shadow-xl focus-visible:ring-2 focus-visible:ring-[#009689] text-lg"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-4 gap-12">
+            <div className="lg:col-span-1">
+              <div className="sticky top-32 space-y-4">
+                <h3 className="text-xl font-bold text-slate-900 mb-6">Quick Categories</h3>
+                {faqCategories.map((cat, idx) => (
+                  <button
+                    key={idx}
+                    className="flex items-center gap-3 w-full p-4 rounded-2xl hover:bg-slate-50 transition-all font-bold text-slate-600 hover:text-[#009689]"
+                  >
+                    <div className={`w-3 h-3 rounded-full ${cat.color}`}></div>
+                    {cat.category}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-3 space-y-16">
+              {filteredCategories.length > 0 ? (
+                filteredCategories.map((cat, catIdx) => (
+                  <div key={catIdx}>
+                    <h2 className="text-3xl font-black text-[#009689] mb-8 flex items-center gap-4">
+                      <HelpCircle className="w-8 h-8" />
+                      {cat.category}
+                    </h2>
+                    <div className="space-y-4">
+                      {cat.questions.map((q, qIdx) => {
+                        const identifier = `${catIdx}-${qIdx}`;
+                        const isOpen = activeItem === identifier;
+                        return (
+                          <div
+                            key={qIdx}
+                            className={`border-2 rounded-[2rem] overflow-hidden transition-all duration-300 ${isOpen ? "border-[#009689] shadow-xl" : "border-slate-100"
+                              }`}
+                          >
+                            <button
+                              onClick={() => setActiveItem(isOpen ? null : identifier)}
+                              className="w-full px-8 py-6 flex items-center justify-between text-left group"
+                            >
+                              <span className={`text-xl font-bold transition-colors ${isOpen ? "text-[#009689]" : "text-slate-800"}`}>
+                                {q.question}
+                              </span>
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-[#009689] text-white" : "bg-slate-50 text-slate-400 group-hover:bg-[#ffd8af] group-hover:text-[#009689]"
+                                }`}>
+                                {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                              </div>
+                            </button>
+                            <AnimatePresence>
+                              {isOpen && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                >
+                                  <div className="px-8 pb-8 pt-2 text-slate-600 text-lg leading-relaxed border-t border-slate-50 mt-2 mx-2">
+                                    {q.answer}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                  <Search className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-slate-800">No results found</h3>
+                  <p className="text-slate-500">Try adjusting your search terms.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Categories */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          {filteredCategories.length === 0 ? (
-            <div className="text-center py-20">
-              <HelpCircle className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-slate-700 mb-2">No results found</h3>
-              <p className="text-slate-600">Try a different search term or browse all categories</p>
-            </div>
-          ) : (
-            <div className="space-y-12">
-              {filteredCategories.map((category, catIndex) => (
-                <div key={catIndex}>
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className={`${category.color} w-12 h-12 rounded-lg flex items-center justify-center`}>
-                      <HelpCircle className={`w-6 h-6 ${category.color === 'bg-[#009689]' ? 'text-white' : 'text-[#009689]'}`} />
-                    </div>
-                    <h2 className="text-3xl font-black text-[#009689]">{category.category}</h2>
-                  </div>
-
-                  <div className="space-y-4">
-                    {category.questions.map((item, qIndex) => (
-                      <Card 
-                        key={qIndex}
-                        className="border-2 hover:border-[#009689] transition-all duration-300"
-                      >
-                        <CardContent className="p-0">
-                          <button
-                            onClick={() => toggleItem(catIndex, qIndex)}
-                            className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-slate-50 transition-colors"
-                          >
-                            <span className="font-bold text-lg text-slate-900 pr-4">
-                              {item.question}
-                            </span>
-                            <ChevronDown 
-                              className={`w-6 h-6 text-[#009689] flex-shrink-0 transition-transform duration-300 ${
-                                isOpen(catIndex, qIndex) ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </button>
-                          
-                          <div 
-                            className={`overflow-hidden transition-all duration-300 ${
-                              isOpen(catIndex, qIndex) ? 'max-h-96' : 'max-h-0'
-                            }`}
-                          >
-                            <div className="px-6 pb-5 pt-2 text-slate-700 leading-relaxed border-t">
-                              {item.answer}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Still Need Help Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="max-w-4xl mx-auto">
-            <Card className="border-2 border-[#009689]">
-              <CardContent className="p-12 text-center">
-                <MessageCircle className="w-16 h-16 text-[#009689] mx-auto mb-6" />
-                <h2 className="text-4xl font-black text-[#009689] mb-4">
-                  Still Need Help?
-                </h2>
-                <p className="text-xl text-slate-600 mb-8">
-                  Can't find the answer you're looking for? Our support team is ready to assist you.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    className="bg-[#009689] hover:bg-[#007a6e] text-white px-8 py-6 text-lg font-bold shadow-xl"
-                  >
-                    Contact Support
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    className="border-2 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white px-8 py-6 text-lg font-bold"
-                  >
-                    Live Chat
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+      {/* Footer Support */}
+      <section className="py-24 bg-[#ffd8af] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <MessageCircle className="w-20 h-20 text-[#009689] mx-auto mb-8" />
+          <h2 className="text-4xl md:text-5xl font-black text-[#009689] mb-6">Still Have Questions?</h2>
+          <p className="text-2xl text-slate-700 max-w-2xl mx-auto mb-10 font-medium">
+            Our dedicated support team is available 24/7 to help you with any issues or queries.
+          </p>
+          <div className="flex flex-wrap justify-center gap-6">
+            <Button className="bg-[#009689] hover:bg-[#007a6e] text-white px-10 py-8 text-xl font-bold rounded-[2rem] shadow-2xl transition-transform hover:scale-105">
+              Start Live Chat
+            </Button>
+            <Button variant="outline" className="border-4 border-[#009689] text-[#009689] hover:bg-[#009689] hover:text-white px-10 py-8 text-xl font-bold rounded-[2rem] transition-transform hover:scale-105">
+              Email Support
+            </Button>
           </div>
         </div>
       </section>

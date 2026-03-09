@@ -1,6 +1,7 @@
-import { Target, Users, Shield, Zap, TrendingUp, Award } from "lucide-react";
+import { motion } from "framer-motion";
+import { Target, Shield, Zap, TrendingUp, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import SectionHeader from "@/components/modules/HomePages/SectionHeader";
 
 const AboutPage = () => {
   const teamMembers = [
@@ -51,33 +52,29 @@ const AboutPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="py-20 bg-[#009689] text-white">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="mb-6 bg-white text-[#009689] hover:bg-white px-4 py-2">
-              About ZapWallet
-            </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6">
-              Revolutionizing Digital Payments
-            </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
-              Making financial services accessible, secure, and instant for
-              everyone
-            </p>
-          </div>
+      {/* Hero Header */}
+      <section className="pt-32 pb-20 bg-slate-50 border-b border-slate-100">
+        <div className="container mx-auto px-6">
+          <SectionHeader
+            badge="Our Company"
+            title="Pioneering the Future of Digital Assets"
+            subtitle="ZapWallet is more than just a payment app. We're a growing ecosystem dedicated to financial freedom."
+          />
         </div>
       </section>
 
       {/* Story Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-black text-[#009689] mb-6">
-                Our Story
-              </h2>
-              <div className="space-y-4 text-lg text-slate-700">
+      <section className="py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl font-black text-[#009689] mb-8">Our Journey</h2>
+              <div className="space-y-6 text-xl text-slate-600 leading-relaxed">
                 <p>
                   ZapWallet was born from a simple vision: to make digital
                   payments as easy as handing cash to a friend.
@@ -94,34 +91,38 @@ const AboutPage = () => {
                   financial services truly accessible.
                 </p>
               </div>
-            </div>
-            <div className="bg-[#ffd8af]/20 rounded-3xl p-12 border-4 border-[#ffd8af]">
-              <div className="space-y-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-[#009689] rounded-full flex items-center justify-center text-white font-black text-2xl">
-                    10M+
+            </motion.div>
+            <div className="relative">
+              <div className="absolute -inset-4 bg-[#ffd8af]/10 rounded-[3rem] rotate-3"></div>
+              <div className="relative bg-[#009689] rounded-[3rem] p-12 text-white shadow-2xl overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
+                <div className="space-y-10 relative z-10">
+                  <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center font-black text-3xl">
+                      10M+
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">Active Users</div>
+                      <div className="text-white/70">Growing community</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-bold text-xl">Active Users</div>
-                    <div className="text-slate-600">Growing daily</div>
+                  <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 bg-[#ffd8af] rounded-2xl flex items-center justify-center text-[#009689] font-black text-3xl">
+                      50K+
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">Agent Network</div>
+                      <div className="text-white/70">Nationwide presence</div>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-[#ffd8af] rounded-full flex items-center justify-center text-[#009689] font-black text-2xl">
-                    50K+
-                  </div>
-                  <div>
-                    <div className="font-bold text-xl">Agent Network</div>
-                    <div className="text-slate-600">Nationwide coverage</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-[#009689] rounded-full flex items-center justify-center text-white font-black text-2xl">
-                    99%
-                  </div>
-                  <div>
-                    <div className="font-bold text-xl">Uptime</div>
-                    <div className="text-slate-600">Always available</div>
+                  <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center font-black text-3xl">
+                      99%
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">Uptime</div>
+                      <div className="text-white/70">Reliable infrastructure</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -131,76 +132,83 @@ const AboutPage = () => {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <Target className="w-16 h-16 mx-auto mb-6 text-[#009689]" />
-            <h2 className="text-4xl font-black text-[#009689] mb-6">
-              Our Mission
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto text-center mb-20">
+            <div className="w-20 h-20 bg-[#009689] rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg shadow-[#009689]/20">
+              <Target className="w-10 h-10 text-white" />
+            </div>
+            <h2 className="text-4xl font-black text-slate-900 mb-6">
+              Our Core Mission
             </h2>
-            <p className="text-xl text-slate-700 leading-relaxed">
-              To democratize financial services by providing secure, instant,
+            <p className="text-2xl text-slate-600 leading-relaxed font-medium">
+              "To democratize financial services by providing secure, instant,
               and affordable digital payment solutions that empower individuals
-              and communities to thrive in the digital economy.
+              and communities to thrive."
             </p>
           </div>
 
-          {/* Values */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className="border-2 hover:border-[#009689] transition-all duration-300 hover:shadow-xl"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
               >
-                <CardContent className="p-6 text-center">
-                  <value.icon className="w-12 h-12 mx-auto mb-4 text-[#009689]" />
-                  <h3 className="font-bold text-lg mb-2">{value.title}</h3>
-                  <p className="text-slate-600 text-sm">{value.description}</p>
-                </CardContent>
-              </Card>
+                <Card className="h-full border-none shadow-xl hover:shadow-2xl transition-all duration-300 group rounded-[2rem] overflow-hidden">
+                  <CardContent className="p-8 text-center">
+                    <div className="w-16 h-16 bg-[#009689]/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <value.icon className="w-8 h-8 text-[#009689]" />
+                    </div>
+                    <h3 className="font-black text-xl mb-3 text-slate-900">{value.title}</h3>
+                    <p className="text-slate-600 leading-relaxed">{value.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Team Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 md:px-12 lg:px-20">
-          <div className="text-center mb-16">
-            <Users className="w-16 h-16 mx-auto mb-6 text-[#009689]" />
-            <h2 className="text-4xl font-black text-[#009689] mb-4">
-              Meet Our Team
-            </h2>
-            <p className="text-xl text-slate-600">
-              Passionate experts dedicated to your financial success
-            </p>
-          </div>
+      <section className="py-24">
+        <div className="container mx-auto px-6">
+          <SectionHeader
+            badge="Our People"
+            title="The Visionaries Behind ZapWallet"
+            subtitle="Meet the talented team working hard to build a more inclusive financial future."
+          />
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
             {teamMembers.map((member, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className="border-2 hover:border-[#ffd8af] transition-all duration-300 hover:shadow-xl"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
               >
-                <CardContent className="p-6 text-center">
-                  <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
-                    <img
-                      src={member.image}
-                      alt={member.name || "Member"}
-                      className="w-full h-full object-cover"
-                    />
+                <div className="group relative text-center">
+                  <div className="absolute -inset-2 bg-gradient-to-br from-[#009689] to-[#ffd8af] rounded-[2.5rem] opacity-0 group-hover:opacity-100 blur-lg transition duration-500"></div>
+                  <div className="relative bg-white rounded-[2.5rem] p-8 shadow-xl border border-slate-100">
+                    <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-[#ffd8af]">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <h3 className="font-black text-2xl text-slate-900 mb-1">{member.name}</h3>
+                    <p className="text-[#009689] font-bold uppercase tracking-wider text-sm">{member.role}</p>
                   </div>
-
-                  <h3 className="font-bold text-xl mb-1">{member.name}</h3>
-                  <p className="text-[#009689] font-medium">{member.role}</p>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
-
-    
     </div>
   );
 };
