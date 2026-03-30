@@ -70,20 +70,6 @@ const getTransactionIcon = (type: TransactionType): { icon: React.ComponentType<
   }
 };
 
-const getTransactionBadgeColor = (type: TransactionType): string => {
-  switch (type) {
-    case "CASH_OUT":
-    case "WITHDRAW":
-      return "bg-red-500 hover:bg-red-600";
-    case "CASH_IN":
-    case "ADD_MONEY":
-      return "bg-green-500 hover:bg-green-600";
-    case "SEND_MONEY":
-      return "bg-blue-500 hover:bg-blue-600";
-    default:
-      return "bg-slate-500 hover:bg-slate-600";
-  }
-};
 
 const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString("en-US", {
